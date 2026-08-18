@@ -17,7 +17,13 @@ This file lives at `skills/setup-shipyard/SKILL.md`. Packs and templates are sib
 - `packs/<pack>/skills/` and `packs/<pack>/rules/`
 - `templates/docs/agents/`
 
-Resolve plugin root as the directory that contains both `packs/` and `skills/setup-shipyard/`. Try, in order: two levels up from this `SKILL.md`; `~/.cursor/plugins/local/shipyard`. If none exist, stop.
+Resolve plugin root as the directory that contains both `packs/` and `skills/setup-shipyard/`. Try, in order:
+
+1. `.cursor/plugins/shipyard` in the workspace (git submodule — **preferred**)
+2. Two levels up from this `SKILL.md` when the skill runs from an installed plugin
+3. `~/.cursor/plugins/local/shipyard` (global dev fallback only)
+
+If none exist, stop and tell the user to add the submodule (see shipyard `README.md`) or run `/setup-shipyard` after installing the plugin in the repo.
 
 ## Gate (do not skip)
 
@@ -112,7 +118,9 @@ Idempotent. Never duplicate `## Shipyard`. Never touch `## Agent skills` or `## 
 ```markdown
 ## Shipyard
 
-Kernel (commands, agents, routing) loads from the **shipyard plugin**. This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
+Kernel (commands, agents, routing) loads from the **shipyard** submodule at `.cursor/plugins/shipyard` (project scope). Registered via `.cursor/hooks/shipyard-workspace-open.sh`. After clone: `git submodule update --init --recursive .cursor/plugins/shipyard`.
+
+This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 
 | Command | Purpose |
 | --- | --- |
