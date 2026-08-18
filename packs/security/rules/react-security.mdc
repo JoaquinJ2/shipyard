@@ -1,0 +1,34 @@
+---
+description: React-specific security rules
+globs: "**/*.{tsx,jsx}"
+alwaysApply: false
+---
+
+# React security
+
+## XSS
+
+- Default: render user text as `{value}` — never unsanitized HTML
+- `dangerouslySetInnerHTML` only with DOMPurify at the same call site — flag in review
+
+## URLs
+
+Validate `href`/`src` schemes — allow `http:`, `https:`, `mailto:` only for user-provided links.
+
+## External links
+
+```tsx
+<a href={url} target="_blank" rel="noopener noreferrer">
+```
+
+## Env vars (Vite)
+
+Only `VITE_*` vars are public in the client bundle. Never prefix secrets with `VITE_`.
+
+## Auth UI
+
+Hiding UI is not authorization. RLS and server checks must enforce access.
+
+## Session storage
+
+Do not store session tokens in `localStorage`. Follow Supabase auth patterns already in the app.

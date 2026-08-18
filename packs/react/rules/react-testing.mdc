@@ -1,0 +1,31 @@
+---
+description: React testing with Vitest
+globs: "**/*.{test,spec}.{ts,tsx}"
+alwaysApply: false
+---
+
+# React testing
+
+## Principle
+
+Test what the user sees and does — behaviour through public interfaces, not implementation details.
+
+## This repo today
+
+Most tests are **domain module tests** in `src/lib/**/*.test.ts` (Vitest, no DOM). Prefer that seam for business logic.
+
+When testing components:
+
+- Use React Testing Library if/when added
+- Query by role/label before `data-testid`
+- `userEvent` over `fireEvent` for interactions
+
+## Hooks
+
+Test custom hooks via public return values — not internal state. Domain hooks that wrap lib modules should have thin or no tests if the lib is tested.
+
+## Anti-patterns
+
+- Asserting on `container.querySelector` when accessible queries exist
+- Mocking child components by default
+- Snapshot tests for component trees

@@ -1,0 +1,44 @@
+---
+description: PostgreSQL and Supabase patterns for migrations and RLS
+globs: "{supabase/**,**/*.sql}"
+alwaysApply: false
+---
+
+# Postgres / Supabase
+
+## Types
+
+| Use | Type |
+| --- | --- |
+| IDs | `bigint` or `uuid` (match existing tables) |
+| Strings | `text` |
+| Timestamps | `timestamptz` |
+| Money | `numeric` |
+| Flags | `boolean` |
+
+## Migrations
+
+- Files under `supabase/migrations/` — never alter production manually
+- New columns: nullable or with default — not `NOT NULL` without default on existing tables
+- Schema migrations separate from data backfills (seed files in `supabase/seed*.sql`)
+- Match naming and RLS patterns from neighbouring migrations (e.g. nutrition, alimentos)
+
+## RLS
+
+```sql
+CREATE POLICY policy_name ON table_name
+  FOR ALL
+  USING ((SELECT auth.uid()) = user_id);
+```
+
+- Enable RLS on every user-data table
+- Test policies against coach vs client roles defined in ADRs
+
+## Indexes
+
+- Index foreign keys and common filter columns
+- Composite indexes: equality columns first, then range
+
+## Skill reference
+
+`.cursor/skills/ecc-postgres-patterns/SKILL.md` and `.cursor/skills/ecc-database-migrations/SKILL.md`

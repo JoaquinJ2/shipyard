@@ -1,0 +1,91 @@
+---
+description: Shipyard agent routing — writer ≠ reviewer, Surface → writer, ship commands. Read docs/agents/shipyard.md for this repo.
+alwaysApply: true
+---
+
+# Agent routing (shipyard)
+
+If `docs/agents/shipyard.md` is missing, do not assume surfaces or QA commands. Tell the user to run `/setup-shipyard`.
+
+## Invariant: writer ≠ reviewer
+
+- **Writers** never run `/code-review`, never commit, never declare the work done, never review their own diff in the same context.
+  - Composer (`implementer`, `frontend-developer`): Matt `/implement` → `/tdd`.
+  - Grok (`designer` as writer): writes only `design-system/**` — does not run `/implement`.
+- **Reviewers** (Grok) are read-only. They report findings; they do not edit product code.
+- The orchestrator launches reviewers in **fresh context** after the writer finishes.
+- Never use `inherit` model from writer → reviewer.
+- When `Surface: design-system`, the writer was `designer` — **do not** launch `designer` as the Design review axis (spec + standards cover MASTER fidelity). Launch `designer` as Design reviewer only when the writer was not `designer` and the overlay visual pack is on.
+
+## Models (Cursor only)
+
+| Role | Model |
+| --- | --- |
+| `implementer`, `frontend-developer` | `composer-2.5` |
+| `planner`, `designer`, `copywriter`, orchestrator, all reviewers, `qa-verifier` | `cursor-grok-4.6-high` |
+| Claude / GPT | do not use |
+
+## Ticket `Surface:` → writer
+
+| Surface | Writer |
+| --- | --- |
+| `backend` | `implementer` |
+| `frontend` | `frontend-developer` |
+| `design-system` | `designer` |
+| `tooling` | `implementer` |
+
+Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. Paths each writer owns come from `docs/agents/shipyard.md`. If `visual: off`, do not use `frontend` or `design-system`.
+
+## Commands
+
+| Command | Purpose |
+| --- | --- |
+| `/setup-shipyard` | Overlay + pack copy (once per repo) |
+| `/plan-prd` | Idea → grill → spec → tickets. Designer step if visual on and UI. No product code. |
+| `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → writer by `Surface:` → review → QA → livingdocs → commit |
+| `/ship-prd` | Branch `feat/<feature>` → all tickets → one commit per ticket |
+| `/review-diff` | Review battery + QA only, no writer |
+| `/audit-ui` | Only if visual on. Report → `.scratch/<audit-slug>/AUDIT.md`. No `src/` edits. |
+
+## Agent → when to use
+
+| Agent | When |
+| --- | --- |
+| `planner` | `/plan-prd`, spec work, seam confirmation |
+| `implementer` | `Surface: backend` or `tooling` |
+| `frontend-developer` | `Surface: frontend` (visual pack) |
+| `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-prd` UI specs |
+| `copywriter` | Visible strings when copy pack is on |
+| `spec-reviewer` | After writer — diff vs ticket/PRD |
+| `standards-reviewer` | After writer — `.cursor/rules` + smells |
+| `security-reviewer` | After writer — auth, input, secrets, RLS |
+| `database-reviewer` | Overlay `database: on` and diff matches SQL globs |
+| `qa-verifier` | Overlay QA command list |
+
+## Conditional review (ship / review-diff)
+
+Launch in fresh Grok context when the diff matches:
+
+| Axis | Agent | When |
+| --- | --- | --- |
+| Copy | `copywriter` | Copy pack on and visible user-facing strings changed |
+| Design | `designer` | Visual pack on, UI/css/DS changed, **and** writer was not `designer` |
+
+Always: `spec-reviewer` + `standards-reviewer` + `security-reviewer` (+ `database-reviewer` if overlay database pack and SQL globs match).
+
+Fix loop: copy/UI → `frontend-developer`; DS gap → `designer` then frontend; domain/SQL/tooling → `implementer`.
+
+## Skills
+
+- **Process (Matt, global):** `/ask-matt`, `/grill-with-docs`, `/to-spec`, `/to-tickets`, `/implement`, `/tdd`, `/code-review`
+- **Docs:** `/livingdocs-record` before closing a behaviour change
+- **QA:** plugin `verification-loop` reads overlay QA list
+- **Stack / visual:** copied into `.cursor/skills/` by `/setup-shipyard`
+
+## Issue tracker
+
+Ship tickets live under `.scratch/<feature>/issues/` even if Matt `/triage` uses GitHub. See `docs/agents/issue-tracker.md`.
+
+## Git
+
+`docs/agents/git-conventions.md`. Never ship on the overlay base branch (default `main`). Do not force-push or amend commits already pushed.

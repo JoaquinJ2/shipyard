@@ -1,0 +1,32 @@
+---
+description: Design tokens and chrome — MASTER, styles.css, ui-responsive, branded controls
+globs: "**/*.{tsx,css}"
+alwaysApply: false
+---
+
+# Design system
+
+UI chrome and tokens must match `design-system/MASTER.md` (and page overrides) and `src/styles.css`.
+
+## Tokens
+
+- Use documented semantic tokens only (`bg-card`, `text-foreground`, `border-border`, fitness accents, etc.)
+- No loose hex, arbitrary `oklch(...)`, or one-off radius/type scales in components
+- Font: **Inter** via theme (`font-sans` / `--font-display`)
+
+## Layout (`features/ui-responsive`)
+
+- Shells: full-bleed mobile with shell gutter; desktop cap per MASTER (`lg:max-w-6xl` where documented)
+- Manual QA breakpoints: **375 / 768 / 1280**; Tailwind `md` 768, `lg` 1024
+- Route pages must not double shell horizontal padding
+
+## Controls (`features/ui-branded-controls`)
+
+- Product dropdowns: **`SelectField`** — never native `<select>`
+- Dialog / Sheet / Drawer: scrim **`bg-foreground/50`**, panel `bg-card`, dialog `rounded-2xl` — not `bg-black/80` or template `rounded-md` defaults
+
+## Gaps
+
+If MASTER or a page spec lacks a needed token or control variant, stop — request `designer` spec; do not invent in `src/`.
+
+Full workflow: `.cursor/skills/design-system/SKILL.md` and `.cursor/skills/frontend-surfaces/SKILL.md`.

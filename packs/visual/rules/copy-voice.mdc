@@ -1,0 +1,23 @@
+---
+description: Spanish product copy — tuteo, CONTEXT.md glossary, no English UI strings
+globs: "**/*.{tsx,ts}"
+alwaysApply: false
+---
+
+# Copy voice
+
+User-facing strings in `src/` are **Spanish** with **tuteo**.
+
+## Must
+
+- Use terms from `CONTEXT.md` glossary; avoid synonyms listed under `_Avoid_`
+- Keep buttons and headings concise; errors and empty states actionable
+- Match checklist in `.cursor/skills/copy-voice/SKILL.md`
+
+## Must not
+
+- English product copy (`Save`, `Loading…`, `Error`) in UI
+- Structural emoji in product strings
+- "Demo" framing in new copy (badges, session labels, placeholder product voice)
+
+Copy review: `copywriter` agent. Implementation fixes: `frontend-developer`.

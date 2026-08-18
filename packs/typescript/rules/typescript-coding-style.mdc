@@ -1,0 +1,44 @@
+---
+description: TypeScript coding style for this repo
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript coding style
+
+## Types
+
+- Explicit types on exported functions, shared utilities, and public APIs
+- Infer obvious local variable types
+- Use `interface` for extendable object shapes; `type` for unions and utilities
+- Prefer string literal unions over `enum`
+- Avoid `any`; use `unknown` and narrow safely
+
+## Immutability
+
+Prefer spread for updates — do not mutate arguments or shared state:
+
+```typescript
+function updateUser(user: Readonly<User>, name: string): User {
+  return { ...user, name }
+}
+```
+
+## Error handling
+
+- Use async/await with try/catch
+- Narrow `unknown` errors before reading `.message`
+- Never swallow errors silently
+
+## Validation
+
+Use Zod for user input and API boundaries. Infer types with `z.infer<typeof schema>`.
+
+## Logging
+
+No `console.log` in production code paths. Use structured handling or remove before merge.
+
+## Stack notes
+
+- TanStack Router + React Query for routing and server state
+- Supabase client for persistence — never embed service role keys in client bundles

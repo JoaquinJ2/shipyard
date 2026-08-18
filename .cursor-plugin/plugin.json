@@ -1,0 +1,10 @@
+{
+  "name": "shipyard",
+  "description": "Plan, review, and ship tickets with a writer-not-reviewer agent crew. Overlay via /setup-shipyard.",
+  "version": "0.1.0",
+  "author": {
+    "name": "JoaquinJ2"
+  },
+  "license": "MIT",
+  "keywords": ["agents", "ship", "plan-prd", "review", "tickets"]
+}

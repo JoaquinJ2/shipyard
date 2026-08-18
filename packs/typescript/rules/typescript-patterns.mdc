@@ -1,0 +1,33 @@
+---
+description: TypeScript patterns for this repo
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript patterns
+
+## Module boundaries
+
+- Domain logic in `src/lib/<domain>/` — pure functions, testable at public seams
+- Hooks in `src/hooks/` — thin adapters over lib modules
+- UI in `src/routes/` and `src/components/` — no business rules buried in JSX
+
+## Custom hooks
+
+Extract hooks when the same state/effect sequence appears in 2+ components. Keep hooks focused.
+
+## Repository / adapter pattern
+
+Persist through adapters (memory, Supabase). Domain modules depend on interfaces, not Supabase directly.
+
+## API responses
+
+Prefer typed results over throwing for expected failures at boundaries:
+
+```typescript
+type Result<T> = { ok: true; value: T } | { ok: false; error: string }
+```
+
+## Domain language
+
+Match test names and public API vocabulary to `CONTEXT.md`. Read relevant ADRs before changing behaviour.

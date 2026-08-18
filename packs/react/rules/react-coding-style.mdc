@@ -1,0 +1,54 @@
+---
+description: React component coding style
+globs: "**/*.{tsx,jsx}"
+alwaysApply: false
+---
+
+# React coding style
+
+## Files
+
+- `.tsx` for JSX; `.ts` for hooks/types without JSX
+- Tests: `.test.ts` / `.test.tsx` mirroring source
+
+## Naming
+
+- Components: `PascalCase` (`UserCard.tsx`)
+- Hooks: `useCamelCase`
+- Handlers: `handleClick` internally; props `onClick`
+- Boolean props: `isLoading`, `hasError` — not bare `loading`
+
+## Component shape
+
+```tsx
+type Props = {
+  user: User
+  onSelect: (id: string) => void
+}
+
+export function UserCard({ user, onSelect }: Props) {
+  return (
+    <button type="button" onClick={() => onSelect(user.id)}>
+      {user.name}
+    </button>
+  )
+}
+```
+
+- Destructure props in the parameter list
+- No class components in new code
+- Extract multi-line JSX logic to consts above `return`
+
+## State
+
+- Local first (`useState`), lift when shared
+- TanStack Query for server-derived data — avoid `fetch` in `useEffect` when Query fits
+- React Hook Form + Zod for complex forms (already in stack)
+
+## Stack
+
+TanStack Start + Vite — not Next.js App Router. No `"use client"` / RSC boundaries unless the file already uses them.
+
+## Design tokens and chrome
+
+Follow `.cursor/rules/design-system.mdc` and `.cursor/skills/frontend-surfaces/SKILL.md` — read `design-system/MASTER.md` before UI work; do not invent colors, radius, or overlay patterns.

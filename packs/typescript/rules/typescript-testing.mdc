@@ -1,0 +1,33 @@
+---
+description: TypeScript and Vitest testing standards
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# TypeScript testing
+
+## Runner
+
+This project uses **Vitest** (`npm test`, `npm run test:watch`).
+
+## TDD (Matt `/tdd`)
+
+- Test at **pre-agreed seams** only — confirm seams before writing tests
+- Red → green → next slice (vertical, not horizontal)
+- Tests describe user-visible behaviour through public interfaces
+- No implementation-coupled tests (mocking internals, asserting private state)
+
+## File layout
+
+- Co-locate domain tests: `src/lib/<domain>/<module>.test.ts`
+- Mirror the module under test; one concern per test file when possible
+
+## Assertions
+
+- Expected values from independent sources (spec, worked example) — not recomputed like the code
+- Prefer pure function tests for domain modules
+- Run single test files during development; full suite before claiming done
+
+## Coverage
+
+No fixed percentage gate. Cover seams and critical paths agreed in the ticket/PRD.

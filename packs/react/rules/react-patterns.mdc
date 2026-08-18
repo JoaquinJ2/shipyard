@@ -1,0 +1,40 @@
+---
+description: React patterns for this repo
+globs: "**/*.{tsx,jsx}"
+alwaysApply: false
+---
+
+# React patterns
+
+## Render = f(props, state)
+
+Derive values during render. Do not sync derived state with `useEffect`.
+
+## Container / presentational
+
+- Route/page components: data loading, wiring
+- Presentational components: props in, JSX out — no direct Supabase calls
+
+## Data fetching
+
+| Need | Use |
+| --- | --- |
+| Server/cache, mutations | TanStack Query |
+| Form state | React Hook Form |
+| Local UI | `useState` |
+
+## Lists
+
+Stable `key` from ids — never array index for reorderable lists.
+
+## Composition
+
+Prefer `children` and small focused components over deep prop drilling. Use Radix/shadcn primitives already in the project.
+
+## Error boundaries
+
+Wrap async/query error UI at route level where user-facing failures need recovery.
+
+## Skill reference
+
+See `.cursor/skills/ecc-react-patterns/SKILL.md` for deeper patterns.

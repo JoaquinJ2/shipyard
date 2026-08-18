@@ -1,0 +1,29 @@
+---
+description: Project-wide security checklist
+globs: "{src/**,supabase/**}"
+alwaysApply: false
+---
+
+# Security checklist
+
+Before merging behaviour that touches auth, data, or user input:
+
+- [ ] No hardcoded secrets (API keys, passwords, tokens)
+- [ ] User input validated (Zod at boundaries)
+- [ ] SQL via parameterized Supabase client / migrations — no concatenated SQL in app code
+- [ ] XSS: no unsanitized HTML from user content
+- [ ] AuthZ enforced in RLS policies, not only in UI
+- [ ] Error messages do not leak stack traces or internal ids to end users
+- [ ] `.env` / credentials not committed
+
+## Supabase RLS
+
+Every new table with user data needs RLS enabled and policies reviewed. Mirror patterns from existing migrations in this repo.
+
+## On finding issues
+
+Stop and use `security-reviewer` agent. Fix CRITICAL before continuing.
+
+## Skill reference
+
+`.cursor/skills/ecc-security-review/SKILL.md`
