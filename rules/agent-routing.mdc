@@ -40,7 +40,8 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. Pat
 
 | Command | Purpose |
 | --- | --- |
-| `/setup-shipyard` | Overlay + pack copy (once per repo) |
+| `/setup-shipyard` | Overlay + `scripts/sync-cursor.sh` (once per repo) |
+| `/update-shipyard` | Pull submodule + re-materialize kernel and packs |
 | `/plan-prd` | Idea → grill → spec → tickets. Designer step if visual on and UI. No product code. |
 | `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → writer by `Surface:` → review → QA → livingdocs → commit |
 | `/ship-prd` | Branch `feat/<feature>` → all tickets → one commit per ticket |
@@ -80,7 +81,7 @@ Fix loop: copy/UI → `frontend-developer`; DS gap → `designer` then frontend;
 - **Process (Matt, global):** `/ask-matt`, `/grill-with-docs`, `/to-spec`, `/to-tickets`, `/implement`, `/tdd`, `/code-review`
 - **Docs:** `/livingdocs-record` before closing a behaviour change
 - **QA:** plugin `verification-loop` reads overlay QA list
-- **Stack / visual:** copied into `.cursor/skills/` by `/setup-shipyard`
+- **Stack / visual:** copied into `.cursor/skills/` by `scripts/sync-cursor.sh`
 
 ## Issue tracker
 

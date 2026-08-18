@@ -2,7 +2,7 @@
 
 How shipyard commands, plugin agents, Matt skills, and in-repo packs fit together.
 
-Kernel (commands, agents, `agent-routing`, `verification-loop`) loads from the **shipyard plugin**. Overlay: [shipyard.md](./shipyard.md). Packs live under `.cursor/skills/` and `.cursor/rules/` after `/setup-shipyard`.
+Kernel (commands, agents, `agent-routing`, `setup-shipyard`, `verification-loop`) is materialized into `.cursor/commands`, `.cursor/agents`, `.cursor/skills`, and `.cursor/rules` by `scripts/sync-cursor.sh`. Overlay: [shipyard.md](./shipyard.md). Packs land in the same folders. Refresh with `/update-shipyard`.
 
 ## Quick reference
 
@@ -15,6 +15,7 @@ Kernel (commands, agents, `agent-routing`, `verification-loop`) loads from the *
 | Ship whole PRD | `/ship-prd` |
 | Review current diff only | `/review-diff` |
 | Audit UI/copy without editing product UI | `/audit-ui` (visual pack) |
+| Pull plugin updates into `.cursor/` | `/update-shipyard` |
 | Record behaviour in docs | `/livingdocs-record` |
 
 ## Invariant: writer ≠ reviewer
@@ -65,11 +66,11 @@ Do **not** duplicate `ask-matt`, `grill-with-docs`, `to-spec`, `to-tickets`, `im
 
 ## In-repo packs
 
-Copied by `/setup-shipyard` according to overlay packs. Livingdocs stays a separate install.
+Copied by `scripts/sync-cursor.sh` according to overlay packs (`/setup-shipyard` first time, `/update-shipyard` later). Livingdocs stays a separate install.
 
 ## Agents
 
-Plugin agents. Commands pin models when launching Task:
+Materialized into `.cursor/agents/` (and still authored in the plugin). Commands pin models when launching Task:
 
 - Composer writers: `composer-2.5`
 - Grok agents: `cursor-grok-4.6-high`

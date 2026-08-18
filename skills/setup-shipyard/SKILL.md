@@ -8,14 +8,15 @@ disable-model-invocation: true
 
 Prompt-driven. Explore, present findings, walk decisions **one section at a time**, show a draft, then write.
 
-Kernel (commands, agents, routing) stays in the plugin — **do not copy** `commands/`, `agents/`, or `rules/agent-routing.mdc` into the repo.
+After the overlay exists, **materialize** kernel (commands, agents, routing, plugin skills) and enabled packs with `scripts/sync-cursor.sh`. Do not copy those files by hand. Refresh later with `/update-shipyard`.
 
 ## Plugin root
 
-This file lives at `skills/setup-shipyard/SKILL.md`. Packs and templates are sibling folders of `skills/`:
+This file lives at `skills/setup-shipyard/SKILL.md`. Packs, templates, and `scripts/sync-cursor.sh` are sibling folders of `skills/`:
 
 - `packs/<pack>/skills/` and `packs/<pack>/rules/`
 - `templates/docs/agents/`
+- `scripts/sync-cursor.sh`
 
 Resolve plugin root as the directory that contains both `packs/` and `skills/setup-shipyard/`. Try, in order:
 
@@ -101,7 +102,7 @@ Confirm with the user. Copy `react-security.mdc` / `typescript-security.mdc` onl
 Show:
 
 - Full `docs/agents/shipyard.md`
-- List of pack files that will be copied vs skipped (already exist)
+- That `scripts/sync-cursor.sh` will materialize kernel + enabled packs (overwrite shipyard-managed files)
 - `## Shipyard` block for `AGENTS.md` (or `CLAUDE.md` if that is the file Matt used — prefer `AGENTS.md` if both exist and already has Agent skills / Living documentation)
 
 Let the user edit before writing.
@@ -112,13 +113,12 @@ Idempotent. Never duplicate `## Shipyard`. Never touch `## Agent skills` or `## 
 
 1. Write `docs/agents/shipyard.md` from the draft (fill `templates/docs/agents/shipyard.md`).
 2. Write `docs/agents/git-conventions.md` from `templates/docs/agents/git-conventions.md` with `{{BASE_BRANCH}}` replaced. If the file already exists, update the base branch line only unless the user asked to refresh.
-3. Write `docs/agents/skill-routing.md` from the template (safe to replace — it is generated).
-4. Upsert `## Shipyard` in `AGENTS.md`:
+3. Upsert `## Shipyard` in `AGENTS.md`:
 
 ```markdown
 ## Shipyard
 
-Kernel (commands, agents, routing) loads from the **shipyard** submodule at `.cursor/plugins/shipyard` (project scope). Registered via `.cursor/hooks/shipyard-workspace-open.sh`. After clone: `git submodule update --init --recursive .cursor/plugins/shipyard`.
+Kernel (commands, agents, routing) is materialized into `.cursor/commands`, `.cursor/agents`, and `.cursor/rules` from the **shipyard** submodule at `.cursor/plugins/shipyard`. After clone: `git submodule update --init --recursive .cursor/plugins/shipyard`, then `/update-shipyard` (or `scripts/sync-cursor.sh`). Reload Window.
 
 This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 
@@ -129,16 +129,25 @@ This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 | `/ship-prd` | Full PRD on `feat/<slug>` — one commit per ticket |
 | `/review-diff` | Review + QA only (no writer) |
 | `/audit-ui` | UI/copy audit report only (visual pack; no product UI edits) |
+| `/update-shipyard` | Pull submodule + re-copy kernel and packs into `.cursor/` |
 
 **Writer ≠ reviewer.** See [docs/agents/skill-routing.md](docs/agents/skill-routing.md). Git: [docs/agents/git-conventions.md](docs/agents/git-conventions.md). Matt process skills stay global. Livingdocs stays a separate install.
 ```
 
 If a `## Delivery system` heading exists, replace it with `## Shipyard` (do not leave both).
 
-5. Copy enabled packs: for each file in `packs/<pack>/skills/<name>/` → `.cursor/skills/<name>/`; each `packs/<pack>/rules/*.mdc` → `.cursor/rules/`. **Skip** if the destination already exists unless the user asked to refresh from template.
-6. Ensure `.scratch/.gitkeep` exists.
-7. Do not create `CONTEXT.md`. Do not run `/livingdocs-vision`. Do not copy plugin `commands/`, `agents/`, or `agent-routing.mdc`.
+4. Ensure `.scratch/.gitkeep` exists.
+5. Do not create `CONTEXT.md`. Do not run `/livingdocs-vision`.
+6. Materialize kernel + packs (no `--pull` on first setup):
+
+```bash
+<plugin-root>/scripts/sync-cursor.sh --target <repo-root>
+```
+
+The script overwrites shipyard-managed files, writes `.cursor/shipyard-managed.json`, and refreshes `docs/agents/skill-routing.md` from the template. It does not touch livingdocs, feature-spark, or `docs/agents/shipyard.md`.
+
+If the user asked to preserve local pack edits, add `--keep-local`.
 
 ## 5. Done
 
-List paths created, skipped (already present), and packs enabled. Tell the user to Reload Window if the plugin was just symlinked, then `/plan-prd`.
+List the script summary (created / updated / unchanged / skipped / removed) and packs enabled. Tell the user to Reload Window, then `/plan-prd`. Later updates: `/update-shipyard`.

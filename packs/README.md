@@ -1,6 +1,6 @@
 # Overlay packs
 
-`/setup-shipyard` copies from here into the consuming repo. Do not load `packs/` as plugin skills (not under `skills/` at plugin root).
+`scripts/sync-cursor.sh` copies from here into the consuming repo (`/setup-shipyard` first time, `/update-shipyard` later). Do not load `packs/` as plugin skills (not under `skills/` at plugin root).
 
 | Pack | Destination skills | Destination rules |
 | --- | --- | --- |
@@ -13,4 +13,4 @@
 
 Copy destination: `.cursor/skills/<name>/` and `.cursor/rules/<file>.mdc`.
 
-Idempotent: skip a file that already exists unless the user asked to refresh from template.
+Default: overwrite shipyard-managed files so plugin updates reach the repo. Pass `--keep-local` to skip pack files that differ from the plugin. Files not listed in `.cursor/shipyard-managed.json` (livingdocs, feature-spark, …) are never touched.
