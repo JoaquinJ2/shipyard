@@ -1,0 +1,17 @@
+{
+  "name": "shipyard",
+  "owner": {
+    "name": "JoaquinJ2"
+  },
+  "metadata": {
+    "description": "Plan, review, and ship tickets with a writer-not-reviewer agent crew.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "shipyard",
+      "source": ".",
+      "description": "Plan a PRD, ship tickets with writer not reviewer, then record behaviour."
+    }
+  ]
+}
