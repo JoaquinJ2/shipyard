@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 .cursor/plugins/
+__pycache__/
+*.pyc
