@@ -28,16 +28,16 @@ If none exist, stop and tell the user to add the submodule (see shipyard `README
 
 ## Gate (do not skip)
 
-All of these must exist. If any is missing, **stop** and name the command to run. Do not invent issue-tracker or livingdocs files.
+Livingdocs and domain layout must exist. If missing, **stop** and name the command. Do not invent livingdocs files.
 
 | Required | Command if missing |
 | --- | --- |
-| `docs/agents/issue-tracker.md` | `/setup-matt-pocock-skills` |
-| `docs/agents/triage-labels.md` | `/setup-matt-pocock-skills` |
 | `docs/agents/domain.md` | `/setup-matt-pocock-skills` |
 | `.livingdocs.json` and `DDD.md` | `/livingdocs-install` |
 
-Do **not** re-ask issue tracker, triage labels, or domain layout.
+`docs/agents/issue-tracker.md` and `docs/agents/triage-labels.md`: if missing, setup copies shipyard templates (do not overwrite existing Matt copies). Prefer Matt versions when present.
+
+Do **not** re-ask domain layout when `domain.md` already exists.
 
 Ship tickets always live under `.scratch/<feature>/issues/` even if Matt triage uses GitHub Issues. Record that in the overlay. Create `.scratch/` (with `.gitkeep`) if it does not exist.
 
@@ -97,6 +97,20 @@ Propose on/off from detection:
 
 Confirm with the user. Copy `react-security.mdc` / `typescript-security.mdc` only when those packs are also on.
 
+### F — Agent profile
+
+Explainer: ticket Proof plans and stop escalations read this block (agent-ready skill). Prefer commands that already exist in the repo.
+
+Ask / propose:
+
+- `proof_commands` — e.g. same as targeted test + typecheck + lint from section B (comma-separated or YAML list)
+- `must_stay_green` — critical suites or paths
+- `traps` — jobs/caches/flaky areas that mask bugs (`none` if unknown)
+- `do_not` — standing constraints (`none` if none)
+- `escalation.product` / `escalation.env` — role or handle strings (e.g. `human-product`, `human-env`) — not invented GitHub users
+
+Defaults when user is unsure: proof_commands = QA list; others = `none` / `human`.
+
 ## 3. Draft
 
 Show:
@@ -111,9 +125,10 @@ Let the user edit before writing.
 
 Idempotent. Never duplicate `## Shipyard`. Never touch `## Agent skills` or `## Living documentation`.
 
-1. Write `docs/agents/shipyard.md` from the draft (fill `templates/docs/agents/shipyard.md`).
+1. Write `docs/agents/shipyard.md` from the draft (fill `templates/docs/agents/shipyard.md`, including **Agent profile**).
 2. Write `docs/agents/git-conventions.md` from `templates/docs/agents/git-conventions.md` with `{{BASE_BRANCH}}` replaced. If the file already exists, update the base branch line only unless the user asked to refresh.
-3. Upsert `## Shipyard` in `AGENTS.md`:
+3. If missing, copy `templates/docs/agents/issue-tracker.md` → `docs/agents/issue-tracker.md` and `templates/docs/agents/triage-labels.md` → `docs/agents/triage-labels.md`. **Do not overwrite** if they already exist (Matt or prior setup owns them).
+4. Upsert `## Shipyard` in `AGENTS.md`:
 
 ```markdown
 ## Shipyard
@@ -124,21 +139,22 @@ This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 
 | Command | Purpose |
 | --- | --- |
-| `/plan-prd` | Grill → spec → tickets with `Surface:` (designer first if visual UI). No product code. |
-| `/ship-ticket` | One ticket: branch → writer by `Surface:` → review → QA → livingdocs → conventional commit |
+| `/plan-prd` | Grill → invent → slice → draft → refine → readiness gate → tickets with `Surface:`. No product code. |
+| `/refine-ticket` | Refine one `.scratch` issue + fresh CORE readiness gate |
+| `/ship-ticket` | One ticket: branch → plan gate → writer by `Surface:` → review → QA → livingdocs → conventional commit |
 | `/ship-prd` | Full PRD on `feat/<slug>` — one commit per ticket |
 | `/review-diff` | Review + QA only (no writer) |
 | `/audit-ui` | UI/copy audit report only (visual pack; no product UI edits) |
 | `/update-shipyard` | Pull submodule + re-copy kernel and packs into `.cursor/` |
 
-**Writer ≠ reviewer.** See [docs/agents/skill-routing.md](docs/agents/skill-routing.md). Git: [docs/agents/git-conventions.md](docs/agents/git-conventions.md). Matt process skills stay global. Livingdocs stays a separate install.
+**Writer ≠ reviewer.** **Ticket author ≠ readiness gate.** See [docs/agents/skill-routing.md](docs/agents/skill-routing.md). Git: [docs/agents/git-conventions.md](docs/agents/git-conventions.md). Matt process skills stay global. Ticket craft: `agent-ready` skill. Livingdocs stays a separate install.
 ```
 
 If a `## Delivery system` heading exists, replace it with `## Shipyard` (do not leave both).
 
-4. Ensure `.scratch/.gitkeep` exists.
-5. Do not create `CONTEXT.md`. Do not run `/livingdocs-vision`.
-6. Materialize kernel + packs (no `--pull` on first setup):
+5. Ensure `.scratch/.gitkeep` exists.
+6. Do not create `CONTEXT.md`. Do not run `/livingdocs-vision`.
+7. Materialize kernel + packs (no `--pull` on first setup):
 
 ```bash
 <plugin-root>/scripts/sync-cursor.sh --target <repo-root>

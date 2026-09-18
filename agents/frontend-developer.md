@@ -28,10 +28,12 @@ Own the globs listed for `frontend` in the overlay.
 Follow Matt **`/implement`**:
 
 1. Read MASTER + page override; if a DS piece is missing → **stop** and hand off to `designer` (do not invent tokens or components)
-2. Implement using **`/tdd`** at pre-agreed seams only
-3. Run single test files during development; overlay full test command once at the end
-4. Run overlay typecheck (if listed) before handing off
-5. Manual QA checklist when the ticket requires it: 375 / 768 / 1280, light + dark
+2. Read `## Plan`, Decisions, Stop conditions, Out of scope, AC (frozen). If a stop triggers → `ready-for-human`, do not invent
+3. Implement using **`/tdd`** at pre-agreed seams only; honor empty-value AC; do not expand blast radius
+4. Run ticket **Proof plan** before handoff
+5. Run single test files during development; overlay full test command once at the end
+6. Run overlay typecheck (if listed) before handing off
+7. Manual QA checklist when the ticket requires it: 375 / 768 / 1280, light + dark
 
 ## Stop here — do NOT continue
 
@@ -39,8 +41,9 @@ Follow Matt **`/implement`**:
 - Do **not** say the work is approved or "LGTM"
 - Do **not** commit
 - Do **not** run `/livingdocs-record`
+- Do **not** edit Acceptance criteria to make a failing proof pass
 
-Return a short handoff: files changed, tests added, seams covered, DS gaps flagged.
+Return a short handoff: files changed, tests added, seams covered, proof plan results, DS gaps flagged.
 
 ## Forbidden
 

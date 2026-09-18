@@ -1,5 +1,5 @@
 ---
-description: Ship one ready-for-agent ticket — branch, implement, multi-reviewer gate, livingdocs, conventional commit
+description: Ship one ready-for-agent ticket — plan gate, branch, implement, multi-reviewer, livingdocs, conventional commit
 ---
 
 # /ship-ticket
@@ -24,10 +24,17 @@ Parent session: **Grok** (`cursor-grok-4.6-high`). Orchestrator does not write p
 
 - Read ticket + parent PRD
 - Verify `**Status:**` is `ready-for-agent` or `claimed`
+- If `## Agent-readiness gaps` is present (advisory-only ship): **stop** and require explicit user confirm before continuing
 - Verify `**Surface:**` is present (`backend` | `frontend` | `design-system` | `tooling`)
 - Reject `frontend` / `design-system` when overlay `visual: off`
 - Verify blockers listed in `Blocked by:` are `resolved`
-- Set `**Status:** claimed` if not already
+- **CORE section gate** — reject (send to `/refine-ticket`) if any of these are missing:
+  - `Done means:` (or equivalent observable done sentence)
+  - Current state / locators (state table or equivalent)
+  - Acceptance criteria (checkbox list)
+  - Proof plan
+  - Stop conditions **or** explicit `None — no admitted unknowns`
+- Set `**Status:** claimed` if not already — **AC are frozen** from this point; do not silently edit AC mid-loop to make QA pass
 - Derive `<feature-slug>`, `<NN>`, `<ticket-slug>` from the ticket path
 
 ## Step 2 — Branch (before any product code)
@@ -46,6 +53,17 @@ feat/<feature-slug>/<NN>-<ticket-slug>
 
 Capture `FIXED_POINT` = current `HEAD` on the ship branch **after** branch creation.
 
+## Step 2.5 — Plan gate (before writer codes)
+
+Append or update ticket `## Plan` with:
+
+- Files / modules expected to touch
+- Tests to add or update
+- Commands from the ticket Proof plan (and overlay Agent profile)
+- Explicit **will-not-touch** from Out of scope / blast radius
+
+If the plan **reopens a Decision**, **ignores a stop condition**, or expands past Out of scope → set `ready-for-human`, comment why, and **stop**. Do not implement.
+
 ## Step 3 — Implement (writer by Surface)
 
 Launch **exactly one** writer in **fresh context** per ticket `Surface:`:
@@ -57,7 +75,7 @@ Launch **exactly one** writer in **fresh context** per ticket `Surface:`:
 | `design-system` | `designer` | `cursor-grok-4.6-high` |
 | `tooling` | `implementer` | `composer-2.5` |
 
-Prompt must include: follow the named shipyard agent; read `docs/agents/shipyard.md`; implement ONLY this ticket; Matt `/implement` + `/tdd` at seams for Composer writers; do NOT run `/code-review` or commit; ticket/PRD/branch paths.
+Prompt must include: follow the named shipyard agent; read `docs/agents/shipyard.md`; implement ONLY this ticket; honor stop conditions as hard interrupts; run Proof plan before handoff; Matt `/implement` + `/tdd` at seams for Composer writers; do NOT run `/code-review` or commit; ticket/PRD/branch/`## Plan` paths.
 
 ## Step 4 — Review battery (read-only, parallel)
 
@@ -93,6 +111,7 @@ If any CRITICAL/HIGH finding or QA failure:
 1. Send aggregated findings to the matching writer (fresh context)
 2. Repeat steps 4–5
 3. Max **2** fix cycles; then set ticket `ready-for-human` and stop
+4. **Do not** mutate Acceptance criteria to make a failing gate pass — escalate instead
 
 ## Step 7 — Close
 

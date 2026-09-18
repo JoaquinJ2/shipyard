@@ -17,10 +17,13 @@ If overlay `visual: off`, stop — this agent should not run.
 
 ## Writer role (`Surface: design-system`)
 
-1. Create or update `design-system/MASTER.md` and `design-system/pages/` specs
-2. Mirror existing tokens from the codebase stylesheet — do not invent colors, radii, fonts, or spacing absent from the code
-3. Document breakpoints, shells, and branded controls per current app behaviour
-4. Validate MASTER fidelity before handoff
+1. Read ticket Decisions, Stop conditions, Out of scope, AC (frozen), and `## Plan`
+2. If a stop condition triggers → halt → `ready-for-human`; do not invent product rules
+3. Create or update `design-system/MASTER.md` and `design-system/pages/` specs
+4. Mirror existing tokens from the codebase stylesheet — do not invent colors, radii, fonts, or spacing absent from the code
+5. Document breakpoints, shells, and branded controls per current app behaviour
+6. Validate MASTER fidelity before handoff; stay within blast radius
+7. Do not edit Acceptance criteria mid-ship
 
 ## Reviewer role (separate launch, fresh context)
 

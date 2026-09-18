@@ -4,14 +4,14 @@
     "name": "JoaquinJ2"
   },
   "metadata": {
-    "description": "Plan, review, and ship tickets with a writer-not-reviewer agent crew.",
-    "version": "0.1.0"
+    "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer-not-reviewer.",
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "shipyard",
       "source": ".",
-      "description": "Plan a PRD, ship tickets with writer not reviewer, then record behaviour."
+      "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer not reviewer."
     }
   ]
 }

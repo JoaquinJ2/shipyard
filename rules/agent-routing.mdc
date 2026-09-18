@@ -1,5 +1,5 @@
 ---
-description: Shipyard agent routing — writer ≠ reviewer, Surface → writer, ship commands. Read docs/agents/shipyard.md for this repo.
+description: Shipyard agent routing — writer ≠ reviewer, Surface → writer, ticket readiness, ship commands. Read docs/agents/shipyard.md for this repo.
 alwaysApply: true
 ---
 
@@ -17,12 +17,19 @@ If `docs/agents/shipyard.md` is missing, do not assume surfaces or QA commands. 
 - Never use `inherit` model from writer → reviewer.
 - When `Surface: design-system`, the writer was `designer` — **do not** launch `designer` as the Design review axis (spec + standards cover MASTER fidelity). Launch `designer` as Design reviewer only when the writer was not `designer` and the overlay visual pack is on.
 
+## Invariant: ticket author ≠ readiness gate
+
+- **`planner`** (and anyone who drafted the ticket) never sets `ready-for-agent` and never runs the CORE gate on their own draft in the same context.
+- **`ticket-readiness-reviewer`** runs in **fresh** Grok context after refine. Only a `READY` verdict authorizes `**Status:** ready-for-agent`.
+- Never use `inherit` model from planner → ticket-readiness-reviewer.
+- Draft tickets stay at `needs-info` until the gate passes.
+
 ## Models (Cursor only)
 
 | Role | Model |
 | --- | --- |
 | `implementer`, `frontend-developer` | `composer-2.5` |
-| `planner`, `designer`, `copywriter`, orchestrator, all reviewers, `qa-verifier` | `cursor-grok-4.6-high` |
+| `planner`, `designer`, `copywriter`, orchestrator, all reviewers, `ticket-readiness-reviewer`, `qa-verifier` | `cursor-grok-4.6-high` |
 | Claude / GPT | do not use |
 
 ## Ticket `Surface:` → writer
@@ -34,7 +41,7 @@ If `docs/agents/shipyard.md` is missing, do not assume surfaces or QA commands. 
 | `design-system` | `designer` |
 | `tooling` | `implementer` |
 
-Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. Paths each writer owns come from `docs/agents/shipyard.md`. If `visual: off`, do not use `frontend` or `design-system`.
+Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Surface:` is routing metadata **after** a justified split (blocked-ness → proof unit → ownership) — not the primary split reason. Paths each writer owns come from `docs/agents/shipyard.md`. If `visual: off`, do not use `frontend` or `design-system`. Never invent `fullstack`.
 
 ## Commands
 
@@ -42,8 +49,9 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. Pat
 | --- | --- |
 | `/setup-shipyard` | Overlay + `scripts/sync-cursor.sh` (once per repo) |
 | `/update-shipyard` | Pull submodule + re-materialize kernel and packs |
-| `/plan-prd` | Idea → grill → spec → tickets. Designer step if visual on and UI. No product code. |
-| `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → writer by `Surface:` → review → QA → livingdocs → commit |
+| `/plan-prd` | Idea → grill → invent → slice → draft → refine → readiness gate → tickets. No product code. |
+| `/refine-ticket` | Refine one `.scratch` issue + fresh readiness gate |
+| `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → plan gate → writer by `Surface:` → review → QA → livingdocs → commit |
 | `/ship-prd` | Branch `feat/<feature>` → all tickets → one commit per ticket |
 | `/review-diff` | Review battery + QA only, no writer |
 | `/audit-ui` | Only if visual on. Report → `.scratch/<audit-slug>/AUDIT.md`. No `src/` edits. |
@@ -52,12 +60,13 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. Pat
 
 | Agent | When |
 | --- | --- |
-| `planner` | `/plan-prd`, spec work, seam confirmation |
+| `planner` | `/plan-prd`, `/refine-ticket` draft/refine, seams — never self-certify ready |
+| `ticket-readiness-reviewer` | After draft/refine — CORE gate; only READY → `ready-for-agent` |
 | `implementer` | `Surface: backend` or `tooling` |
 | `frontend-developer` | `Surface: frontend` (visual pack) |
 | `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-prd` UI specs |
 | `copywriter` | Visible strings when copy pack is on |
-| `spec-reviewer` | After writer — diff vs ticket/PRD |
+| `spec-reviewer` | After writer — diff vs ticket AC / `Done means:` / Out of scope |
 | `standards-reviewer` | After writer — `.cursor/rules` + smells |
 | `security-reviewer` | After writer — auth, input, secrets, RLS |
 | `database-reviewer` | Overlay `database: on` and diff matches SQL globs |
@@ -79,6 +88,7 @@ Fix loop: copy/UI → `frontend-developer`; DS gap → `designer` then frontend;
 ## Skills
 
 - **Process (Matt, global):** `/ask-matt`, `/grill-with-docs`, `/to-spec`, `/to-tickets`, `/implement`, `/tdd`, `/code-review`
+- **Ticket craft:** plugin `agent-ready` (anatomy, slicing, refinement, CORE gate)
 - **Docs:** `/livingdocs-record` before closing a behaviour change
 - **QA:** plugin `verification-loop` reads overlay QA list
 - **Stack / visual:** copied into `.cursor/skills/` by `scripts/sync-cursor.sh`

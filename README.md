@@ -1,8 +1,24 @@
 # Shipyard
 
-Cursor plugin: plan a PRD, ship tickets with **writer ≠ reviewer**, then record behaviour.
+Cursor plugin for agent-driven delivery:
 
-Kernel (commands, agents, routing) lives in this repo. Per-repo overlay is created by `/setup-shipyard`. Because Cursor does not reliably load project-scope plugins yet, `scripts/sync-cursor.sh` **materializes** kernel + enabled packs into the consuming repo's `.cursor/` (committed projection). Refresh with `/update-shipyard`.
+**Discover (Matt) → Manufacture tickets (`agent-ready`) → Gate (`ticket-readiness-reviewer`) → Ship (writers ≠ reviewers) → Record (livingdocs)**
+
+Kernel (commands, agents, routing, skills) lives in this repo. Per-repo overlay is created by `/setup-shipyard`. Because Cursor does not reliably load project-scope plugins yet, `scripts/sync-cursor.sh` **materializes** kernel + enabled packs into the consuming repo's `.cursor/` (committed projection). Refresh with `/update-shipyard`.
+
+Ticket decidability (state tables, stop conditions, empty-value semantics, CORE readiness gate) is adapted from the sibling **[agent-ready-tickets](https://github.com/JoaquinJ2/agent-ready-tickets)** standard into `skills/agent-ready/`.
+
+## Pipeline
+
+| Stage | Who | Output |
+| --- | --- | --- |
+| Discover | Matt `/grill-with-docs` via `planner` | Approvals table, seams |
+| Manufacture | `planner` + `agent-ready` templates | `.scratch/<feature>/PRD.md` + issues at `needs-info` |
+| Gate | `ticket-readiness-reviewer` (fresh) | `ready-for-agent` only on READY |
+| Ship | writers by `Surface:` + code reviewers + QA | Branch, diff, conventional commit |
+| Record | `/livingdocs-record` | CHANGELOG / feature docs |
+
+**Invariants:** writer ≠ code reviewer; ticket author ≠ readiness gate; `Surface:` is routing after a justified split (not layer-by-reflex).
 
 ## Install from Cursor (local repo)
 
@@ -38,12 +54,12 @@ Add to `.cursor/hooks.json` (merge with existing hooks):
 
 Copy the hook script from `templates/hooks/shipyard-workspace-open.sh` in this repo to `.cursor/hooks/shipyard-workspace-open.sh` and `chmod +x` it.
 
-Then run `/setup-shipyard` in the target repo. That writes `docs/agents/shipyard.md` and runs `scripts/sync-cursor.sh`, which copies:
+Then run `/setup-shipyard` in the target repo. That writes `docs/agents/shipyard.md` (including **Agent profile**) and runs `scripts/sync-cursor.sh`, which copies:
 
 - `commands/` → `.cursor/commands/`
 - `agents/` → `.cursor/agents/`
 - `rules/agent-routing.mdc` → `.cursor/rules/`
-- plugin `skills/` → `.cursor/skills/`
+- plugin `skills/` → `.cursor/skills/` (includes `agent-ready/`)
 - enabled `packs/` → `.cursor/skills/` and `.cursor/rules/`
 
 Commit those files. Reload the Cursor window.
@@ -93,17 +109,22 @@ Reload Window. Applies to **all** projects — prefer the submodule flow above f
 
 | Path | Role |
 | --- | --- |
-| `commands/` | `/plan-prd`, `/ship-ticket`, `/ship-prd`, `/review-diff`, `/audit-ui`, `/setup-shipyard`, `/update-shipyard` |
-| `agents/` | Writer and reviewer prompts (read overlay first) |
-| `rules/agent-routing.mdc` | Always-on routing |
+| `commands/` | `/plan-prd`, `/refine-ticket`, `/ship-ticket`, `/ship-prd`, `/review-diff`, `/audit-ui`, `/setup-shipyard`, `/update-shipyard` |
+| `agents/` | Writers, code reviewers, `ticket-readiness-reviewer`, `qa-verifier` |
+| `rules/agent-routing.mdc` | Always-on routing (writer ≠ reviewer; author ≠ gate) |
+| `skills/agent-ready/` | Ticket anatomy, slicing, refinement, CORE gate, templates |
 | `skills/setup-shipyard/` | Interactive overlay + sync |
 | `skills/verification-loop/` | QA from overlay command list |
 | `scripts/sync-cursor.sh` | Materialize kernel + packs into the consuming repo |
 | `packs/` | Copied into the repo by sync (visual, react, vite, typescript, postgres, security) |
-| `templates/` | overlay, git-conventions, skill-routing, workspace hook |
+| `templates/` | overlay, git-conventions, skill-routing, issue-tracker, triage-labels, workspace hook |
 
 ## Overlay
 
-`docs/agents/shipyard.md` in the consuming repo: surfaces, packs, QA commands, git base branch. Agents and commands read it on start.
+`docs/agents/shipyard.md` in the consuming repo: surfaces, packs, **Agent profile** (proof commands, traps, escalation), QA commands, git base branch. Agents and commands read it on start.
 
 Tickets of `/plan-prd` and `/ship-*` live under `.scratch/` even if Matt triage uses GitHub Issues.
+
+## Attribution
+
+Agent-ready ticket craft adapted from **agent-ready-tickets** (state tables, stop conditions, empty-value semantics, fresh-context CORE gate, refinement loop). Shipyard adds Surface routing, ship orchestration, and livingdocs closeout.

@@ -6,7 +6,7 @@ description: Ship a full PRD — branch, all tickets in dependency order, conven
 
 Deliver every ticket in `.scratch/<feature-slug>/` respecting `Blocked by` edges.
 
-Inherits the full **`/ship-ticket`** pipeline per ticket.
+Inherits the full **`/ship-ticket`** pipeline per ticket (CORE section gate, plan gate, frozen AC, reviews, QA).
 
 ## On start
 
@@ -27,6 +27,8 @@ Feature slug (directory name under `.scratch/`).
 - Read `.scratch/<slug>/PRD.md` and all `issues/*.md`
 - Abort if PRD missing or no tickets
 - Verify every ticket has `**Surface:**`
+- Prefer tickets already `ready-for-agent`. If a ticket is still `needs-info`, run `/refine-ticket` (or abort) — do not ship undecidable work
+- If any ticket has `## Agent-readiness gaps`, require explicit user confirm before that ticket
 
 ## Step 2 — Branch (once, before any ticket)
 
@@ -56,7 +58,7 @@ All tickets in this run commit to this single branch.
 
 For each ticket in order, run the **`/ship-ticket`** pipeline **on the shared branch** `feat/<feature-slug>`:
 
-- claim → writer by `Surface:` → parallel reviewers → `qa-verifier` → fix loop → livingdocs → resolve
+- claim → CORE/plan gates → writer by `Surface:` → parallel reviewers → `qa-verifier` → fix loop → livingdocs → resolve
 
 | Surface | Writer |
 | --- | --- |
@@ -67,6 +69,7 @@ For each ticket in order, run the **`/ship-ticket`** pipeline **on the shared br
 Use a fresh `FIXED_POINT` per ticket (tip of branch before that ticket's implementation).
 
 Never reuse a writer's context for review. Never let a writer self-review.
+Do not re-run the readiness gate unless the ticket body mutated since READY.
 
 ## Step 5 — Commit per ticket
 
@@ -82,6 +85,7 @@ When all tickets are `resolved`:
 2. Update `.scratch/archive/README.md` and any map files the issue-tracker doc names
 3. Run `/livingdocs-record` if not already done for final behaviour
 4. Optional final commit if archive/map changes remain unstaged: `docs(<feature-slug>): archive shipped PRD increment`
+5. Set PRD **Status:** `shipped` before or as part of archive
 
 ## Parallelism note
 
@@ -90,6 +94,8 @@ Parallel tickets only when `Blocked by` allows **and** file trees do not overlap
 ## Forbidden
 
 - Skipping review for "small" tickets
+- Shipping tickets that fail the CORE section gate
+- Silently editing AC mid-loop
 - Leaving shipped PRD under active `.scratch/<slug>/`
 - Commits on the base branch
 - Force-push or amend pushed commits

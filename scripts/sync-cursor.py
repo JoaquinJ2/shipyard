@@ -218,6 +218,7 @@ def collect_kernel(plugin: Path) -> list[tuple[Path, Path, str]]:
     for skill_dir in sorted((plugin / "skills").iterdir()):
         if not skill_dir.is_dir() or not (skill_dir / "SKILL.md").is_file():
             continue
+        # Includes nested trees (e.g. skills/agent-ready/{rules,templates,checklists}/).
         for src in iter_files(skill_dir):
             rel = src.relative_to(plugin / "skills")
             ops.append((src, Path(".cursor/skills") / rel, "kernel"))

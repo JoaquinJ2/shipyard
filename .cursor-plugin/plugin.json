@@ -1,8 +1,8 @@
 {
   "name": "shipyard",
   "displayName": "Shipyard",
-  "version": "0.1.0",
-  "description": "Plan, review, and ship tickets with a writer-not-reviewer agent crew. Overlay via /setup-shipyard.",
+  "version": "0.2.0",
+  "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer-not-reviewer. Overlay via /setup-shipyard.",
   "author": {
     "name": "JoaquinJ2"
   },
