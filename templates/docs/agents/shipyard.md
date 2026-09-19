@@ -49,11 +49,23 @@ escalation:
 - `do_not` — standing constraints (e.g. no new deps without approval)
 - `escalation` — who/role to mention when a stop condition needs a human
 
-## QA (ordered, stop on fail)
+## QA (ticket)
+
+Default: the Agent profile `proof_commands` (targeted tests / typecheck / lint). Override with an ordered list if this repo needs something else. Stop on fail.
+
+{{PROOF_COMMANDS}}
+
+Writers already run Proof plans before handoff. This list is the post-diff **ticket** gate (`qa-verifier` scope `ticket`).
+
+## QA (increment)
+
+Full suite. Run when a scratch tree closes (last ticket, or `/ship-prd` Step 6). Stop on fail.
 
 {{QA_LIST}}
 
-Overlay QA is the post-diff gate (`qa-verifier`). Ticket Proof plans are what writers run before claiming done.
+Then `node bin/livingdocs-lint.mjs` if `.livingdocs.json` trigger paths changed (verification-loop).
+
+If this overlay still has a single `## QA` heading (legacy), kernel treats that list as **increment** and uses `proof_commands` for **ticket**.
 
 ## Git
 

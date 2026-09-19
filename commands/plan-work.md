@@ -36,9 +36,11 @@ Orchestrator and `planner` agent: **`cursor-grok-4.6-high`**. Readiness reviewer
 
 3. **Explore** — `CONTEXT.md`, relevant ADRs, existing `features/<slug>/`, optional `AUDIT.md`, overlay Agent profile.
 
-4. **Inventory first** — Search `.scratch/` (and tracker if used) per `agent-ready` `rules/20-slicing.md`. Record what was searched and refused.
+4. **Inventory first** — Search `.scratch/` **active**, `.scratch/deferred/`, and `.scratch/archive/` (and tracker if used) per `agent-ready` `rules/20-slicing.md`. Deferred is **not** shipped. Record what was searched and refused.
 
-5. **Shape A–E** — Bias to **A** or **B**. State in one paragraph: outcome code, why, inventory class, what you refused to create or split.
+5. **Shape A–E + Lane** — Bias to **A** or **B**. State in one paragraph: outcome code, why, inventory class, what you refused to create or split. Then set `**Lane:**` `light` | `standard` | `high` (after grill + inventory).
+   - **light** is forbidden when the work includes DB/migration, auth/RLS, payments, secrets, a public contract, or a **new** reusable visual rule (`design-system/**`).
+   - **light** is typically shape B, one ticket, no DS ticket.
    - Forbidden: a PRD because the workflow has a PRD step.
    - Forbidden: split by layer (backend / frontend) as a reflex.
    - **A / B / Dup:** announce the shape and **continue**.
@@ -59,18 +61,19 @@ Orchestrator and `planner` agent: **`cursor-grok-4.6-high`**. Readiness reviewer
 
 7. **Seams** — D/E: human confirms test seams (A-seam / A10-style) before child tickets if not already locked in Approvals. B/C: Highest seam + Ban on the ticket. If the seam is **new** or conflicts with Agent profile, halt with one question.
 
-8. **Design-system first** — If overlay `visual: on` and the work touches UI — after the shape exists (and the PRD exists when D/E) — delegate to **`designer`** to land `design-system/` specs **before** frontend tickets are written.
+8. **Design-system first** — Overlay `visual: on` does **not** by itself create a `design-system` ticket or launch `designer` before frontend. Do that **only** when a reusable visual contract is created or changed (`design-system/**`). Applying existing MASTER/tokens → `Surface: frontend`; Design review later if the ship **diff** touches UI.
 
 9. **Draft tickets** — Matt `/to-tickets` constrained by `templates/feature-task.md` (or `bug.md`) + rules `10` / `20` / `30` / `40`.
    - Split by **blocked-ness**, then **proof unit**, then **ownership** — not by layer as a reflex.
    - After each justified split, assign **exactly one** `Surface:` (`backend` | `frontend` | `design-system` | `tooling`). Omit frontend/design-system when `visual: off`. Never invent `fullstack`.
    - Each ticket includes `## Why this is a separate ticket` (one line).
    - Fill state table, Decisions (including grill locks on B/C), Stop conditions, AC, Proof plan (Agent profile commands).
+   - Set `**Lane:**` on every ticket (and on the PRD when D/E).
    - Set `**Status:** needs-info` on every new ticket. **Forbidden** to set `ready-for-agent` in this step.
 
-10. **Refine** — Run `agent-ready` `rules/50-refinement-loop.md` (ground → OQs → fold). Max **3** planner passes through draft→gate.
+10. **Refine** — Run `agent-ready` `rules/50-refinement-loop.md` (ground → OQs → fold). Max **3** planner passes through draft→gate. Before launching the gate, the planner runs `checklists/planner-preflight.md`. If preflight fails, do **not** launch the reviewer.
 
-11. **Readiness gate** — For **each** delivery ticket, launch **`ticket-readiness-reviewer`** in a **fresh** Grok context (pass number N). Paste verdict into ticket `## Readiness`.
+11. **Readiness gate** — Launch **`ticket-readiness-reviewer`** in a **fresh** Grok context (pass number N) with a **batch of 1–5** delivery tickets from the **same** scratch tree. Never `inherit` from planner. One independent `VERDICT` per file. Paste each into that ticket `## Readiness`.
     - `READY` → orchestrator sets `**Status:** ready-for-agent`
     - `NEEDS_MORE_INFO` and pass &lt; 3 → back to refine
     - Pass 3, advisory only → append `## Agent-readiness gaps`; leave **not** ready-for-agent unless human explicitly accepts

@@ -14,6 +14,7 @@ Matt `/to-spec` may draft content; this template is the required skeleton.
 
 **Status:** needs-info
 **Slug:** `<feature-slug>`
+**Lane:** light | standard | high
 
 ## Problem
 

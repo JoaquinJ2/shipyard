@@ -13,7 +13,7 @@ stub over dropping structure. Rules: `rules/10-ticket-anatomy.md`.
 **Type:** task
 **Surface:** backend | frontend | design-system | tooling
 **Blocked by:** <NN, … or —>
-**Risk:** low | medium | high
+**Lane:** light | standard | high
 
 ## Parent
 

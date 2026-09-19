@@ -13,12 +13,12 @@ Ticket decidability (state tables, stop conditions, empty-value semantics, CORE 
 | Stage | Who | Output |
 | --- | --- | --- |
 | Discover | Matt `/grill-with-docs` via `planner` (always) | Locks A1…An; PRD Approvals when D/E, else ticket Decisions |
-| Manufacture | `planner` + `agent-ready` templates | `.scratch/<feature>/issues/` at `needs-info`; `PRD.md` only for D/E |
-| Gate | `ticket-readiness-reviewer` (fresh) | `ready-for-agent` only on READY |
-| Ship | writers by `Surface:` + code reviewers + QA | Branch, diff, conventional commit |
-| Record | `/livingdocs-record` | CHANGELOG / feature docs |
+| Manufacture | `planner` + `agent-ready` templates | `.scratch/<feature>/issues/` at `needs-info`; Lane; `PRD.md` only for D/E |
+| Gate | `ticket-readiness-reviewer` (fresh, batched) after planner preflight | `ready-for-agent` only on READY |
+| Ship | writers by `Surface:` (serial on `/ship-prd`) + review matrix + QA ticket/increment | Branch, diff, conventional commit |
+| Record | `/livingdocs-record` at contract close | CHANGELOG / feature docs |
 
-**Invariants:** writer ≠ code reviewer; ticket author ≠ readiness gate; `Surface:` is routing after a justified split (not layer-by-reflex).
+**Invariants:** writer ≠ code reviewer; ticket author ≠ readiness gate; `Surface:` is routing after a justified split (not layer-by-reflex); process **Lane** is not product risk.
 
 ## Install from Cursor (local repo)
 

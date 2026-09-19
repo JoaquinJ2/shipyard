@@ -42,13 +42,13 @@ Infer writer from ticket `Surface:` when available (for Design axis skip).
 
 ## Step 3 — Review battery (parallel, Grok, read-only)
 
-Launch in one message:
+Infer `Lane:` from the ticket (missing → `standard`). Launch in one message:
 
 | Agent | When |
 | --- | --- |
 | `spec-reviewer` | always |
-| `standards-reviewer` | always |
-| `security-reviewer` | always |
+| `standards-reviewer` | `standard` and `high`. On **light**: static lints/diagnostics only — do not launch the agent |
+| `security-reviewer` | **high** always. Otherwise only if the diff touches auth, external input, permissions, secrets, or overlay SQL/Supabase/RLS globs |
 | `database-reviewer` | overlay `database: on` and diff matches SQL globs |
 | `copywriter` | overlay copy not `off` and visible strings changed |
 | `designer` (reviewer) | overlay `visual: on`, UI/css/DS changed, **and** writer ≠ `designer` |
@@ -59,7 +59,7 @@ Each gets diff command, spec path, and the shipyard agent. **No editing.**
 
 ## Step 4 — QA
 
-Launch `qa-verifier` with `verification-loop` and overlay QA list.
+Launch `qa-verifier` with `verification-loop`. Default scope **increment** (whole-diff review). Use **ticket** only if the user named an in-progress PRD slice that is not the last ticket.
 
 ## Step 5 — Report
 

@@ -27,3 +27,15 @@ _Avoid_: PRD folder (when there is no PRD)
 **Shape**:
 The slicing outcome A–E (or Dup) from `agent-ready` `rules/20-slicing.md`. Chosen after grill and inventory.
 _Avoid_: Split (as the outcome name)
+
+**Lane**:
+Process intensity on a delivery unit or PRD: `light`, `standard`, or `high`. Chosen after grill and inventory. Not product impact.
+_Avoid_: Risk (as the process field)
+
+**Increment QA**:
+The full overlay suite (`## QA (increment)`). Run when a scratch tree closes, not on every internal slice.
+_Avoid_: Running the full suite as the per-ticket gate
+
+**Deferred**:
+A scratch tree under `.scratch/deferred/<slug>/`. Parked, not shipped. Inventory must still see it.
+_Avoid_: Putting unfinished work in `.scratch/archive/`

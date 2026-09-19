@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.4.0
+
+### Added
+
+- **Lane** `light | standard | high` on tickets (and PRDs). Routes review, QA, and whether a design-system ticket is warranted.
+- Planner **preflight** (`checklists/planner-preflight.md`) before the CORE gate; gate may batch 1–5 tickets of the same tree.
+- Overlay **QA (ticket)** vs **QA (increment)**; `qa-verifier` scope. Legacy single `## QA` list still works (increment + `proof_commands` for ticket).
+- `.scratch/deferred/` for parked trees; `archive/` is shipped-only.
+- ADR `docs/adr/0002-risk-proportional-process.md`.
+
+### Changed
+
+- `/plan-work` does not launch designer merely because `visual: on` and the work touches UI.
+- Ship review matrix: spec always; standards skipped on light (static lints); security always only on `high`.
+- `/livingdocs-record` at contract close (last ticket / no-PRD tree), not every PRD slice.
+- `/ship-prd` serializes writers; increment QA once at the end.
+
 ## 0.3.0
 
 ### Added

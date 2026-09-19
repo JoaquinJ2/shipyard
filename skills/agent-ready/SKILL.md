@@ -37,7 +37,7 @@ Uncertainty above 5% is a **defect in the ticket**, not something the writer wil
 | One vs many | `rules/20-slicing.md` |
 | Forks / scope | `rules/30-decisions-and-boundaries.md` |
 | AC / proof | `rules/40-acceptance-criteria.md` |
-| Refining | `rules/50-refinement-loop.md` + `templates/refinement-comment.md` |
+| Refining | `rules/50-refinement-loop.md` + `templates/refinement-comment.md` + `checklists/planner-preflight.md` |
 | READY vs NMI | `rules/60-readiness-gate.md` + `checklists/readiness-gate.md` |
 | Bug | `templates/bug.md` |
 | Intake | `templates/request-intake.md` |
@@ -51,6 +51,8 @@ Uncertainty above 5% is a **defect in the ticket**, not something the writer wil
 | --- | --- |
 | Delivery issues | `.scratch/<feature>/issues/<NN>-<slug>.md` |
 | PRD (shape D/E only) | `.scratch/<feature>/PRD.md` |
+| Deferred (parked) | `.scratch/deferred/<feature>/` |
+| Archive (shipped) | `.scratch/archive/<feature>/` |
 | Project proof/traps/escalation | `docs/agents/shipyard.md` → **Agent profile** |
 | Surfaces / QA / packs | `docs/agents/shipyard.md` |
 
@@ -63,6 +65,7 @@ Uncertainty above 5% is a **defect in the ticket**, not something the writer wil
 5. Transcribe screenshots/attachments/design frames into text.
 6. If discussion redirected the ticket, the body must say so and what it supersedes.
 7. After a justified split, assign **exactly one** `Surface:` (`backend` | `frontend` | `design-system` | `tooling`). Never invent `fullstack`.
+8. Set **`Lane:`** `light` | `standard` | `high`. Do not mark `light` when the work is DB/auth/RLS/payments/secrets/public contract/new DS rule.
 
 ## Ready marker
 

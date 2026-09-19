@@ -66,9 +66,9 @@ If there is no UI, propose `visual: off` and only `backend` + `tooling`.
 
 ### B — QA
 
-Explainer: `qa-verifier` runs these commands in order and stops on failure.
+Explainer: `qa-verifier` has two scopes. **Ticket** uses Agent profile `proof_commands` (focal). **Increment** uses the full ordered suite when a scratch tree closes. Stop on failure.
 
-Propose from real scripts (`npm run build`, `npx tsc --noEmit`, `npm run lint`, `npm test`, `go test ./...`, etc.). Do not invent gates that are not in the repo.
+Propose the **increment** list from real scripts (`npm run build`, `npx tsc --noEmit`, `npm run lint`, `npm test`, `go test ./...`, etc.). Do not invent gates that are not in the repo. `proof_commands` (section F) should be a cheaper subset (often typecheck + targeted test).
 
 ### C — Visual and copy (skip if no UI / user chose visual off)
 
@@ -139,10 +139,10 @@ This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 
 | Command | Purpose |
 | --- | --- |
-| `/plan-work` | Grill (always) → inventory → shape A–E → draft → refine → readiness gate → tickets with `Surface:`. PRD only for D/E. No product code. `/plan-prd` is an alias. |
+| `/plan-work` | Grill (always) → inventory → shape A–E + Lane → draft → preflight → batched gate → tickets. PRD only for D/E. `/plan-prd` is an alias. |
 | `/refine-ticket` | Refine one `.scratch` issue + fresh CORE readiness gate |
-| `/ship-ticket` | One ticket: branch → plan gate → writer by `Surface:` → review → QA → livingdocs → conventional commit |
-| `/ship-prd` | Full PRD on `feat/<slug>` — one commit per ticket |
+| `/ship-ticket` | One ticket: branch → plan gate → writer → review matrix → QA ticket/increment → livingdocs on contract close → commit |
+| `/ship-prd` | Full PRD on `feat/<slug>` — one writer at a time; increment QA at end |
 | `/review-diff` | Review + QA only (no writer) |
 | `/audit-ui` | UI/copy audit report only (visual pack; no product UI edits) |
 | `/update-shipyard` | Pull submodule + re-copy kernel and packs into `.cursor/` |

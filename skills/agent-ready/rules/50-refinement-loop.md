@@ -119,3 +119,10 @@ Then stop. Rewriting the parent and children is a separate, approved act.
 - Quietly resolve a contradiction between two sources — name both and rule explicitly.
 - Change the kind of an item, or merge two disciplines into one, on its own authority.
 - Mark a ticket ready on its own judgement — that is the gate's call (`rules/60`).
+
+## 8. Planner preflight (before the gate)
+
+Before asking the orchestrator to launch `ticket-readiness-reviewer`, run
+`checklists/planner-preflight.md`. It checks that CORE-shaped **sections exist** in the body
+(C1–C8/C10 structure, plus Parent, Lane, Surface). It does **not** score decidability and must
+**not** set `ready-for-agent`. If preflight fails, stay in draft/fold — do not spend a gate pass.

@@ -5,8 +5,9 @@ consequence of evidence, never of aesthetics.
 
 ## Inventory first — it is a constraint, not a hint
 
-Before proposing any shape, search `.scratch/` (and the product issue tracker if the repo uses
-one) for duplicates, near-duplicates, candidate parents and related work.
+Before proposing any shape, search `.scratch/` (active), `.scratch/deferred/`, `.scratch/archive/`
+(and the product issue tracker if the repo uses one) for duplicates, near-duplicates, candidate
+parents and related work. **Deferred is not shipped.** Archive is shipped (or must not be there).
 
 | Inventory result | Required response |
 | --- | --- |

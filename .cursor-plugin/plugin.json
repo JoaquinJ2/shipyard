@@ -1,7 +1,7 @@
 {
   "name": "shipyard",
   "displayName": "Shipyard",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer-not-reviewer. Overlay via /setup-shipyard.",
   "author": {
     "name": "JoaquinJ2"

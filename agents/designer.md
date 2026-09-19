@@ -42,7 +42,7 @@ Review UI diffs (`tsx`, `css`, `design-system/`) against MASTER and page overrid
 
 | Trigger | Role |
 | --- | --- |
-| `/plan-work` with UI | Writer — land DS specs **before** frontend tickets |
+| `/plan-work` when a reusable visual contract is created or changed | Writer — land DS specs **before** frontend tickets |
 | `Surface: design-system` ticket | Writer — MASTER/pages only |
 | `/ship-ticket`, `/review-diff` | Reviewer — when diff touches UI/css/DS |
 | `/audit-ui` | Reviewer — parallel with copywriter |

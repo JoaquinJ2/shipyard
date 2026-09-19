@@ -26,6 +26,7 @@ Parent session: **Grok** (`cursor-grok-4.6-high`). Orchestrator does not write p
 - Verify `**Status:**` is `ready-for-agent` or `claimed`
 - If `## Agent-readiness gaps` is present (advisory-only ship): **stop** and require explicit user confirm before continuing
 - Verify `**Surface:**` is present (`backend` | `frontend` | `design-system` | `tooling`)
+- Read `**Lane:**` (`light` | `standard` | `high`). If missing, treat as **standard**.
 - Reject `frontend` / `design-system` when overlay `visual: off`
 - Verify blockers listed in `Blocked by:` are `resolved`
 - **CORE section gate** — reject (send to `/refine-ticket`) if any of these are missing:
@@ -79,13 +80,13 @@ Prompt must include: follow the named shipyard agent; read `docs/agents/shipyard
 
 ## Step 4 — Review battery (read-only, parallel)
 
-Launch in **one message**, all Grok, **fresh contexts**:
+Read `**Lane:**` (missing → `standard`). Launch matching axes in **one message**, all Grok, **fresh contexts**:
 
 | Agent | When |
 | --- | --- |
 | `spec-reviewer` | always |
-| `standards-reviewer` | always |
-| `security-reviewer` | always |
+| `standards-reviewer` | `standard` and `high`. On **light**: do **not** launch; run static lints/diagnostics on the diff (e.g. ReadLints) instead |
+| `security-reviewer` | **high** always. Otherwise only if the diff touches auth, external input, permissions, secrets, or overlay SQL/Supabase/RLS globs |
 | `database-reviewer` | overlay `database: on` and diff matches overlay SQL globs |
 | `copywriter` | overlay copy not `off` and diff touches visible user-facing strings |
 | `designer` (reviewer) | overlay `visual: on`, diff touches UI/css/DS, **and** writer ≠ `designer` |
@@ -94,9 +95,16 @@ When `Surface: design-system`, skip the Design review axis.
 
 Each prompt: `git diff FIXED_POINT...HEAD`; ticket + PRD; shipyard agent; writer used; **read-only**.
 
+Do not skip an axis the matrix requires. Do not launch an axis the matrix does not require.
+
 ## Step 5 — QA gate
 
-Launch **`qa-verifier`** (Grok) with the `verification-loop` skill and overlay QA list.
+Decide scope:
+
+- **ticket** — this tree has a `PRD.md` **and** at least one sibling issue is still open (`needs-info`, `ready-for-agent`, `claimed`, `ready-for-human`, `needs-triage`)
+- **increment** — no `PRD.md`, **or** this is the last open issue in the tree, **or** `Lane: high` on an isolated (no-PRD) ticket
+
+Launch **`qa-verifier`** with `verification-loop` and that scope (`ticket` | `increment`).
 
 ## Step 6 — Fix loop
 
@@ -115,9 +123,12 @@ If any CRITICAL/HIGH finding or QA failure:
 
 ## Step 7 — Close
 
-1. Run **`/livingdocs-record`** if behaviour changed
+1. Run **`/livingdocs-record`** only when behaviour changed **and** this is a **contract close**:
+   - no parent `PRD.md` (shape B/C last or only ticket), **or**
+   - this is the last open issue in a PRD tree
+   Internal PRD slices skip the FEATURES/CHANGELOG sweep.
 2. Append `## Answer` to ticket; set `**Status:** resolved`
-3. If last open ticket in PRD → archive per `docs/agents/issue-tracker.md`
+3. If last open ticket in the tree → archive per `docs/agents/issue-tracker.md` (only if every issue is `resolved` or `wontfix`)
 
 ## Step 8 — Commit (Conventional Commits)
 

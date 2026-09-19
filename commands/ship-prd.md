@@ -50,15 +50,17 @@ All tickets in this run commit to this single branch.
 
 1. Parse `Blocked by:` on each ticket
 2. Tickets with no unresolved blockers are **ready**
-3. Independent ready tickets **may run in parallel** when they touch disjoint file trees
+3. Independent ready tickets still run **one writer at a time** on `feat/<feature-slug>` (no parallel writers, no worktrees)
 4. Sequential chain when blockers exist
-5. UI tickets (`Surface: frontend` or `design-system`) that touch the same overlay frontend/DS globs → run **serially** even if unblocked
+5. UI tickets (`Surface: frontend` or `design-system`) that touch the same overlay frontend/DS globs stay serial (same as all writers)
 
 ## Step 4 — Per ticket
 
 For each ticket in order, run the **`/ship-ticket`** pipeline **on the shared branch** `feat/<feature-slug>`:
 
-- claim → CORE/plan gates → writer by `Surface:` → parallel reviewers → `qa-verifier` → fix loop → livingdocs → resolve
+- claim → CORE/plan gates → writer by `Surface:` → review matrix → `qa-verifier` **ticket** (unless last/high isolated) → fix loop → livingdocs only on last ticket → resolve
+
+**One writer at a time.** Reviews for the current ticket may run in parallel with each other (read-only). Do not start the next ticket's writer until this ticket is committed (or failed to `ready-for-human`).
 
 | Surface | Writer |
 | --- | --- |
@@ -84,18 +86,20 @@ When all tickets are `resolved`:
 1. Archive tree to `.scratch/archive/<slug>/` per `docs/agents/issue-tracker.md`
 2. Update `.scratch/archive/README.md` and any map files the issue-tracker doc names
 3. Run `/livingdocs-record` if not already done for final behaviour
-4. Optional final commit if archive/map changes remain unstaged: `docs(<feature-slug>): archive shipped PRD increment`
-5. Set PRD **Status:** `shipped` before or as part of archive
+4. Launch **`qa-verifier`** scope **`increment`** once (full overlay suite). Do not re-run the increment suite on every slice.
+5. Optional final commit if archive/map changes remain unstaged: `docs(<feature-slug>): archive shipped PRD increment`
+6. Set PRD **Status:** `shipped` before or as part of archive
 
-## Parallelism note
+## Writers
 
-Parallel tickets only when `Blocked by` allows **and** file trees do not overlap. Serialize commits on one branch.
+**Serialize writers** on `feat/<feature-slug>`. Order by `Blocked by`. Reviews of one ticket may be parallel (read-only). Forbidden: two writers on the same branch at once. No worktrees.
 
 ## Forbidden
 
-- Skipping review for "small" tickets
+- Skipping a review **axis the matrix requires**
 - Shipping tickets that fail the CORE section gate
 - Silently editing AC mid-loop
 - Leaving shipped PRD under active `.scratch/<slug>/`
 - Commits on the base branch
 - Force-push or amend pushed commits
+- Parallel writers / worktrees for this command

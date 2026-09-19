@@ -36,15 +36,15 @@ Every ticket declares **`Surface:`** (`backend` | `frontend` | `design-system` |
 ```
 planner (Grok) + agent-ready skill
   → grill-with-docs (always) → locks A1…An
-  → inventory .scratch/
-  → shape A–E (rules/20; bias A/B)
+  → inventory active + deferred + archive
+  → shape A–E + Lane (rules/20; bias A/B; light forbidden on DB/auth/…)
   → halt on C/D/E or ambiguous B vs D; continue on A/B/Dup
-  → if visual on and UI: designer specs in design-system/ (before frontend tickets)
+  → designer specs only if reusable visual contract changes
   → seams on ticket (B/C) or PRD (D/E)
   → D/E only: to-spec → .scratch/<feature>/PRD.md (templates/prd.md)
-  → to-tickets → issues/*.md (feature-task.md; Parent PRD or —; Surface after slice; Status needs-info)
-  → refine loop (max 3)
-  → ticket-readiness-reviewer (fresh) per ticket
+  → to-tickets → issues/*.md (Lane; Parent PRD or —; Surface after slice; Status needs-info)
+  → refine loop (max 3) + planner-preflight
+  → ticket-readiness-reviewer (fresh, batch 1–5 same tree)
   → only READY → ready-for-agent
   → stop (no code); /ship-prd only if PRD.md exists
 ```
@@ -52,8 +52,8 @@ planner (Grok) + agent-ready skill
 ### `/refine-ticket`
 
 ```
-planner refine (agent-ready rules/50)
-  → ticket-readiness-reviewer (fresh)
+planner refine (agent-ready rules/50 + preflight)
+  → ticket-readiness-reviewer (fresh; batch 1 unless siblings named)
   → READY → ready-for-agent | NMI → needs-info | pass3 CORE fail → intake/spike
 ```
 
@@ -64,21 +64,21 @@ claim ticket (ready-for-agent or claimed; CORE sections present)
   → branch feat/<feature>/<NN>-<ticket-slug> from overlay base
   → Plan gate (## Plan) — halt if Decisions/stops violated
   → writer by Surface
-  → parallel reviewers (Grok; conditional copy/design/database)
-  → qa-verifier (overlay QA list)
+  → review matrix by Lane + diff (spec always)
+  → qa-verifier ticket or increment
   → fix loop (max 2; AC frozen at claimed)
-  → livingdocs-record
-  → resolve ticket (+ archive if last)
+  → livingdocs-record on contract close only
+  → resolve ticket (+ archive if last and fully resolved)
   → conventional commit on ship branch
 ```
 
 ### `/ship-prd`
 
-Same as `/ship-ticket` per ticket on `feat/<feature-slug>`, ordered by `Blocked by`. One conventional commit per ticket.
+Same as `/ship-ticket` per ticket on `feat/<feature-slug>`, **one writer at a time**, ordered by `Blocked by`. Ticket QA per slice; increment QA + livingdocs at close. One conventional commit per ticket.
 
 ### `/review-diff`
 
-Review battery + QA only. No writer.
+Review matrix + QA (default increment). No writer.
 
 ## Matt skills (global, not in repo)
 

@@ -20,7 +20,7 @@ If `docs/agents/shipyard.md` is missing, do not assume surfaces or QA commands. 
 ## Invariant: ticket author ≠ readiness gate
 
 - **`planner`** (and anyone who drafted the ticket) never sets `ready-for-agent` and never runs the CORE gate on their own draft in the same context.
-- **`ticket-readiness-reviewer`** runs in **fresh** Grok context after refine. Only a `READY` verdict authorizes `**Status:** ready-for-agent`.
+- **`ticket-readiness-reviewer`** runs in **fresh** Grok context after refine (batches of 1–5 tickets from the same tree, independent verdicts). Only a `READY` verdict authorizes `**Status:** ready-for-agent`.
 - Never use `inherit` model from planner → ticket-readiness-reviewer.
 - Draft tickets stay at `needs-info` until the gate passes.
 
@@ -49,10 +49,10 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Su
 | --- | --- |
 | `/setup-shipyard` | Overlay + `scripts/sync-cursor.sh` (once per repo) |
 | `/update-shipyard` | Pull submodule + re-materialize kernel and packs |
-| `/plan-work` | Idea → always grill → inventory → shape A–E → draft → refine → readiness gate → tickets. PRD only for D/E. No product code. `/plan-prd` is an alias. |
+| `/plan-work` | Idea → always grill → inventory → shape A–E + Lane → draft → preflight → batched readiness gate → tickets. PRD only for D/E. No product code. `/plan-prd` is an alias. |
 | `/refine-ticket` | Refine one `.scratch` issue + fresh readiness gate |
-| `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → plan gate → writer by `Surface:` → review → QA → livingdocs → commit |
-| `/ship-prd` | Branch `feat/<feature>` → all tickets → one commit per ticket |
+| `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → plan gate → writer by `Surface:` → review matrix → QA ticket/increment → livingdocs on contract close → commit |
+| `/ship-prd` | Branch `feat/<feature>` → tickets **serially** (one writer) → increment QA at end |
 | `/review-diff` | Review battery + QA only, no writer |
 | `/audit-ui` | Only if visual on. Report → `.scratch/<audit-slug>/AUDIT.md`. No `src/` edits. |
 
@@ -61,27 +61,31 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Su
 | Agent | When |
 | --- | --- |
 | `planner` | `/plan-work` (alias `/plan-prd`), `/refine-ticket` draft/refine, seams — never self-certify ready |
-| `ticket-readiness-reviewer` | After draft/refine — CORE gate; only READY → `ready-for-agent` |
+| `ticket-readiness-reviewer` | After draft/refine + preflight — CORE gate; batches of 1–5 same tree; only READY → `ready-for-agent` |
 | `implementer` | `Surface: backend` or `tooling` |
 | `frontend-developer` | `Surface: frontend` (visual pack) |
-| `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-work` UI specs |
+| `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-work` only when a reusable visual contract changes |
 | `copywriter` | Visible strings when copy pack is on |
 | `spec-reviewer` | After writer — diff vs ticket AC / `Done means:` / Out of scope |
-| `standards-reviewer` | After writer — `.cursor/rules` + smells |
-| `security-reviewer` | After writer — auth, input, secrets, RLS |
+| `standards-reviewer` | After writer — `.cursor/rules` + smells (`standard`/`high`; light uses static lints) |
+| `security-reviewer` | After writer — **high** always; else auth, input, secrets, RLS per diff |
 | `database-reviewer` | Overlay `database: on` and diff matches SQL globs |
-| `qa-verifier` | Overlay QA command list |
+| `qa-verifier` | Overlay QA: scope `ticket` or `increment` |
 
-## Conditional review (ship / review-diff)
+## Review matrix (ship / review-diff)
 
-Launch in fresh Grok context when the diff matches:
+Launch in fresh Grok context. Read ticket `**Lane:**` (missing → `standard`).
 
 | Axis | Agent | When |
 | --- | --- | --- |
+| Spec | `spec-reviewer` | always |
+| Standards | `standards-reviewer` | `standard` and `high`. **light:** static lints only |
+| Security | `security-reviewer` | `high` always; else diff touches auth, external input, permissions, secrets, or SQL/Supabase/RLS globs |
+| Database | `database-reviewer` | overlay `database: on` and diff matches SQL globs |
 | Copy | `copywriter` | Copy pack on and visible user-facing strings changed |
 | Design | `designer` | Visual pack on, UI/css/DS changed, **and** writer was not `designer` |
 
-Always: `spec-reviewer` + `standards-reviewer` + `security-reviewer` (+ `database-reviewer` if overlay database pack and SQL globs match).
+Do not skip an axis the matrix requires. Do not launch an axis it does not.
 
 Fix loop: copy/UI → `frontend-developer`; DS gap → `designer` then frontend; domain/SQL/tooling → `implementer`.
 
@@ -89,8 +93,8 @@ Fix loop: copy/UI → `frontend-developer`; DS gap → `designer` then frontend;
 
 - **Process (Matt, global):** `/ask-matt`, `/grill-with-docs`, `/to-spec`, `/to-tickets`, `/implement`, `/tdd`, `/code-review`
 - **Ticket craft:** plugin `agent-ready` (anatomy, slicing, refinement, CORE gate)
-- **Docs:** `/livingdocs-record` before closing a behaviour change
-- **QA:** plugin `verification-loop` reads overlay QA list
+- **Docs:** `/livingdocs-record` at contract close (last ticket of a tree, or tree without PRD)
+- **QA:** plugin `verification-loop` — overlay QA ticket vs increment
 - **Stack / visual:** copied into `.cursor/skills/` by `scripts/sync-cursor.sh`
 
 ## Issue tracker

@@ -11,7 +11,7 @@ Owns `design-system/**` specs. **Do not redesign the brand** — mirror what alr
 
 - Creating or updating `design-system/MASTER.md`
 - Adding `design-system/pages/<route>.md` overrides
-- `/plan-work` UI step (designer writes specs before frontend tickets)
+- `/plan-work` when a reusable visual contract is created or changed (designer writes specs before frontend tickets)
 - `Surface: design-system` tickets
 - Reviewing UI diffs for token/chrome drift (designer reviewer axis)
 

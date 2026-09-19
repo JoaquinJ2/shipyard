@@ -26,12 +26,13 @@ Orchestrator and `planner`: **`cursor-grok-4.6-high`**. `ticket-readiness-review
 2. If status is `claimed` / `resolved`, stop — do not refine mid-ship without human confirm.
 3. Delegate to **`planner`** to refine per `rules/50`:
    - Ground in repo (commit/environment Limitation line)
-   - Inventory related `.scratch/` items
+   - Inventory related `.scratch/` items (active, deferred, archive)
    - Draft or replace body using `templates/feature-task.md` / `bug.md` as appropriate
+   - Run `checklists/planner-preflight.md` — if it fails, do not launch the gate
    - Open questions → fold answers into Decisions
    - Keep or set `**Status:** needs-info`
    - **Never** set `ready-for-agent`
-4. Launch **`ticket-readiness-reviewer`** in fresh context with pass number N.
+4. Launch **`ticket-readiness-reviewer`** in fresh context with pass number N (this command: batch of 1 unless the user named siblings in the same tree, then 1–5).
 5. Apply outcome:
    - `READY` → set `ready-for-agent`; paste `## Readiness`
    - `NEEDS_MORE_INFO` and pass &lt; 3 → leave `needs-info`; tell user to re-run or continue answers

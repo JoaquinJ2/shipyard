@@ -1,6 +1,6 @@
 # Issue tracker: Local Markdown (shipyard)
 
-Issues (and PRDs when the work is an initiative) live as markdown under `.scratch/`. Shipped trees move to `.scratch/archive/<feature-slug>/`.
+Issues (and PRDs when the work is an initiative) live as markdown under `.scratch/`. **Shipped** trees move to `.scratch/archive/<feature-slug>/`. **Parked** trees move to `.scratch/deferred/<feature-slug>/`.
 
 Ticket craft (anatomy, slicing, readiness): `.cursor/skills/agent-ready/` (templates under that skill).
 
@@ -12,7 +12,8 @@ A scratch tree is `.scratch/<feature-slug>/` plus `issues/`. **`PRD.md` exists o
 | --- | --- | --- |
 | Delivery issues | `.scratch/<feature-slug>/issues/<NN>-<slug>.md` (from `01`) | Always |
 | PRD | `.scratch/<feature-slug>/PRD.md` | Shape D/E only |
-| Archive | `.scratch/archive/<feature-slug>/` | After last ticket closes |
+| Archive (shipped) | `.scratch/archive/<feature-slug>/` | After last ticket closes as shipped |
+| Deferred (parked) | `.scratch/deferred/<feature-slug>/` | Human parks unfinished work |
 
 ## Required ticket fields
 
@@ -20,6 +21,7 @@ Near the top of every delivery issue:
 
 - `**Status:**` — see [triage-labels.md](./triage-labels.md)
 - `**Surface:**` — `backend` | `frontend` | `design-system` | `tooling` (routing after a justified split)
+- `**Lane:**` — `light` | `standard` | `high` (process intensity)
 - `**Blocked by:**` — ticket numbers or `—`
 - `## Parent` — link to `../PRD.md` when a PRD exists; otherwise `—`
 
@@ -56,13 +58,19 @@ needs-triage → needs-info → ready-for-agent → claimed → resolved
 When the **final** open issue for a scratch tree is resolved:
 
 1. Every issue is `resolved` (or `wontfix` with reason)
-2. `/livingdocs-record` if behaviour changed
+2. `/livingdocs-record` if behaviour changed (contract close)
 3. Move tree to `.scratch/archive/<feature-slug>/`
 4. If `PRD.md` exists, set PRD `**Status:** shipped`
 5. Fix Parent links; remove empty active feature dir
 6. Update archive README / map files if the repo uses them
 
-Do not archive while any issue is still `claimed`, `ready-for-agent`, or open.
+**Forbidden:** move a tree to `archive/` while any issue is `claimed`, `ready-for-agent`, `needs-triage`, `needs-info`, `ready-for-human`, or labeled `done`. Unfinished work that must leave active `.scratch/` goes to **deferred**.
+
+## Deferred (parked, not shipped)
+
+Move to `.scratch/deferred/<feature-slug>/` when the human parks the increment. Issues may stay `needs-info` / `ready-for-human` / etc.
+
+`/plan-work` inventory **must** search deferred. Do **not** treat it as shipped or as archive.
 
 ## Comments
 

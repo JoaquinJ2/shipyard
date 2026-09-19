@@ -118,7 +118,7 @@ detail" is not a finding.
 ## Marker discipline
 
 - A ready marker (`**Status:** ready-for-agent`) is applied **only** after a fresh-context
-  `READY` from `ticket-readiness-reviewer`.
+  `READY` from `ticket-readiness-reviewer`. Planner preflight is **not** that gate.
 - Never self-certified by the author, the `planner`, or the drafting agent.
 - Whoever executes `/plan-work` (or alias `/plan-prd`) or `/refine-ticket` may not add the marker if the gate omitted it.
 - Parents / PRDs / epics are never `ready-for-agent` for implementation — only delivery issues.
