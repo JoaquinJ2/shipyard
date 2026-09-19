@@ -22,7 +22,7 @@ Parent session: **Grok** (`cursor-grok-4.6-high`). Orchestrator does not write p
 
 ## Step 1 — Load ticket
 
-- Read ticket + parent PRD
+- Read ticket. Load parent `PRD.md` **if present**. Do **not** abort when there is no PRD.
 - Verify `**Status:**` is `ready-for-agent` or `claimed`
 - If `## Agent-readiness gaps` is present (advisory-only ship): **stop** and require explicit user confirm before continuing
 - Verify `**Surface:**` is present (`backend` | `frontend` | `design-system` | `tooling`)

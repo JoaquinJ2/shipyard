@@ -17,7 +17,7 @@ stub over dropping structure. Rules: `rules/10-ticket-anatomy.md`.
 
 ## Parent
 
-[PRD](../PRD.md)
+[PRD](../PRD.md) or `—` if this tree has no PRD (shape B/C)
 
 ## Why this is a separate ticket
 

@@ -2,7 +2,7 @@
 name: agent-ready
 description: >-
   Write, refine, slice, or gate shipyard tickets for cold-start agent implementation.
-  Use for /plan-prd, /refine-ticket, ticket drafting, slicing, acceptance criteria,
+  Use for /plan-work, /plan-prd (alias), /refine-ticket, ticket drafting, slicing, acceptance criteria,
   proof plans, stop conditions, and READY vs NEEDS_MORE_INFO readiness reviews.
 ---
 
@@ -43,14 +43,14 @@ Uncertainty above 5% is a **defect in the ticket**, not something the writer wil
 | Intake | `templates/request-intake.md` |
 | Parent / epic | `templates/epic.md` (never agent-ready) |
 | Spec warranted? | `rules/20-slicing.md` §Spec + `templates/spec.md` |
-| PRD under `.scratch/` | `templates/prd.md` |
+| PRD under `.scratch/` (shape D/E only) | `templates/prd.md` |
 
 ## Shipyard homes
 
 | Artifact | Path |
 | --- | --- |
-| PRD | `.scratch/<feature>/PRD.md` |
 | Delivery issues | `.scratch/<feature>/issues/<NN>-<slug>.md` |
+| PRD (shape D/E only) | `.scratch/<feature>/PRD.md` |
 | Project proof/traps/escalation | `docs/agents/shipyard.md` → **Agent profile** |
 | Surfaces / QA / packs | `docs/agents/shipyard.md` |
 

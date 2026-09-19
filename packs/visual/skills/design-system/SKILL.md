@@ -11,7 +11,7 @@ Owns `design-system/**` specs. **Do not redesign the brand** — mirror what alr
 
 - Creating or updating `design-system/MASTER.md`
 - Adding `design-system/pages/<route>.md` overrides
-- `/plan-prd` UI step (designer writes specs before frontend tickets)
+- `/plan-work` UI step (designer writes specs before frontend tickets)
 - `Surface: design-system` tickets
 - Reviewing UI diffs for token/chrome drift (designer reviewer axis)
 
@@ -47,7 +47,7 @@ Do **not** run persist to invent a new brand — edit MASTER to match the codeba
 | --- | --- |
 | Layout or chrome differs from global rules (auth split, workout fullscreen, agenda week grid) | Standard shell pages that follow MASTER |
 | Token usage override for one route (intentional `max-w-md` dialog rail, etc.) | Shared components with no page-specific deviation |
-| `/plan-prd` or ticket explicitly calls for a page spec | One-off UI that still fits global tokens and shells |
+| `/plan-work` or ticket explicitly calls for a page spec | One-off UI that still fits global tokens and shells |
 
 Page files **override** MASTER for that route; they must not introduce tokens absent from `src/styles.css`.
 

@@ -139,7 +139,7 @@ This repo's overlay is [docs/agents/shipyard.md](docs/agents/shipyard.md).
 
 | Command | Purpose |
 | --- | --- |
-| `/plan-prd` | Grill → invent → slice → draft → refine → readiness gate → tickets with `Surface:`. No product code. |
+| `/plan-work` | Grill (always) → inventory → shape A–E → draft → refine → readiness gate → tickets with `Surface:`. PRD only for D/E. No product code. `/plan-prd` is an alias. |
 | `/refine-ticket` | Refine one `.scratch` issue + fresh CORE readiness gate |
 | `/ship-ticket` | One ticket: branch → plan gate → writer by `Surface:` → review → QA → livingdocs → conventional commit |
 | `/ship-prd` | Full PRD on `feat/<slug>` — one commit per ticket |
@@ -166,4 +166,4 @@ If the user asked to preserve local pack edits, add `--keep-local`.
 
 ## 5. Done
 
-List the script summary (created / updated / unchanged / skipped / removed) and packs enabled. Tell the user to Reload Window, then `/plan-prd`. Later updates: `/update-shipyard`.
+List the script summary (created / updated / unchanged / skipped / removed) and packs enabled. Tell the user to Reload Window, then `/plan-work`. Later updates: `/update-shipyard`.

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0
+
+### Added
+
+- **`/plan-work`** — canonical intake: always `/grill-with-docs`, then inventory, then shape A–E. PRD only for D/E. Shape B/C write issues without `PRD.md`.
+- Kernel **`CONTEXT.md`** and **`docs/adr/0001-plan-work-intake.md`**.
+
+### Changed
+
+- **`/plan-prd`** is an alias of `/plan-work` (does not always write a PRD).
+- `/refine-ticket` and `/ship-ticket` load a parent PRD only if present.
+- Issue tracker: `## Parent` is `—` when there is no PRD; archive still moves the tree.
+
 ## 0.2.0
 
 ### Added

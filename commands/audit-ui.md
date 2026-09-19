@@ -4,7 +4,7 @@ description: Audit UI and copy — read-only report to .scratch/<audit-slug>/AUD
 
 # /audit-ui
 
-Read-only audit of product UI and copy. Produces a report for human confirmation before `/plan-prd`.
+Read-only audit of product UI and copy. Produces a report for human confirmation before `/plan-work`.
 
 **Never edits product UI source.** Never ships fixes directly.
 
@@ -68,9 +68,9 @@ Merge findings into `.scratch/<audit-slug>/AUDIT.md`:
 
 ## Step 4 — Close
 
-Tell the user to run `/plan-prd` with path `.scratch/<audit-slug>/AUDIT.md` when they want tickets.
+Tell the user to run `/plan-work` with path `.scratch/<audit-slug>/AUDIT.md` when they want tickets.
 
-Do not run `/plan-prd`, `/ship-ticket`, or `/ship-prd` unless the user asks.
+Do not run `/plan-work`, `/plan-prd`, `/ship-ticket`, or `/ship-prd` unless the user asks.
 
 ## Forbidden
 

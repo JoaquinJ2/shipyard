@@ -7,7 +7,7 @@ Canonical status strings for `.scratch/` PRDs and issues. Write them as `**Statu
 | Label | Meaning |
 | --- | --- |
 | `needs-triage` | Maintainer has not evaluated the item yet |
-| `needs-info` | Drafting or refining; waiting on answers or CORE fixes. **Default after `/plan-prd` draft.** |
+| `needs-info` | Drafting or refining; waiting on answers or CORE fixes. **Default after `/plan-work` draft.** |
 | `ready-for-agent` | Fresh `ticket-readiness-reviewer` READY. Delivery issues only — never a PRD/epic for implementation. |
 | `ready-for-human` | Stop condition, product decision, or fix-loop cap — needs a human |
 | `wontfix` | Will not be actioned (reason required in body) |

@@ -113,6 +113,19 @@ Write a spec only when a future reader **cannot reconstruct the product from the
 A spec is not a parent-item description dump, and not a place for implementation steps.
 Shape: `templates/spec.md`.
 
+## Shipyard homes (PRD vs issues)
+
+`/plan-work` chooses A–E **after** grill and inventory. Bias to A/B.
+
+| Shape | Scratch tree |
+| --- | --- |
+| **A** | Refine the existing issue. No new PRD. |
+| **B** | `.scratch/<slug>/issues/01-….md` only. `## Parent`: `—`. **No** `PRD.md`. |
+| **C** | Related delivery units: N issues in the **same** folder, no `PRD.md`, `## Parent`: `—`. Unrelated asks are several **B**s, not one C. |
+| **D / E** | `.scratch/<slug>/PRD.md` plus children. This is the only time `/to-spec` writes a PRD. |
+
+Do not stub a PRD so `/ship-prd` has a file. Shape C ships as N × `/ship-ticket`. `/ship-prd` requires a real PRD (D/E).
+
 ## Output of a slicing decision
 
 State, in one short paragraph: the outcome code, why, which inventory class drove it, and

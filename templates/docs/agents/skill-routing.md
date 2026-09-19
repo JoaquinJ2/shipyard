@@ -10,7 +10,7 @@ Kernel (commands, agents, `agent-routing`, `setup-shipyard`, `verification-loop`
 | --- | --- |
 | Figure out which flow fits | Matt `/ask-matt` (global) |
 | Sharpen an idea + glossary/ADRs | Matt `/grill-with-docs` |
-| Plan without coding (to ready tickets) | `/plan-prd` |
+| Plan without coding (to ready tickets) | `/plan-work` (`/plan-prd` alias) |
 | Refine one ticket + readiness gate | `/refine-ticket` |
 | Ship one ticket | `/ship-ticket` |
 | Ship whole PRD | `/ship-prd` |
@@ -29,21 +29,24 @@ Every ticket declares **`Surface:`** (`backend` | `frontend` | `design-system` |
 
 ## Commands → pipeline
 
-### `/plan-prd`
+### `/plan-work`
+
+`/plan-prd` is an alias of this command.
 
 ```
 planner (Grok) + agent-ready skill
-  → grill-with-docs (optional) → Approvals table
+  → grill-with-docs (always) → locks A1…An
   → inventory .scratch/
-  → shape A–E (rules/20)
+  → shape A–E (rules/20; bias A/B)
+  → halt on C/D/E or ambiguous B vs D; continue on A/B/Dup
   → if visual on and UI: designer specs in design-system/ (before frontend tickets)
-  → confirm seams
-  → to-spec → .scratch/<feature>/PRD.md (templates/prd.md)
-  → to-tickets → issues/*.md (feature-task.md; Surface after slice; Status needs-info)
+  → seams on ticket (B/C) or PRD (D/E)
+  → D/E only: to-spec → .scratch/<feature>/PRD.md (templates/prd.md)
+  → to-tickets → issues/*.md (feature-task.md; Parent PRD or —; Surface after slice; Status needs-info)
   → refine loop (max 3)
   → ticket-readiness-reviewer (fresh) per ticket
   → only READY → ready-for-agent
-  → stop (no code)
+  → stop (no code); /ship-prd only if PRD.md exists
 ```
 
 ### `/refine-ticket`

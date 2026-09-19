@@ -1,14 +1,14 @@
 {
   "name": "shipyard",
   "displayName": "Shipyard",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer-not-reviewer. Overlay via /setup-shipyard.",
   "author": {
     "name": "JoaquinJ2"
   },
   "repository": "https://github.com/JoaquinJ2/shipyard",
   "license": "MIT",
-  "keywords": ["agents", "ship", "plan-prd", "review", "tickets"],
+  "keywords": ["agents", "ship", "plan-work", "plan-prd", "review", "tickets"],
   "commands": "./commands",
   "agents": "./agents",
   "skills": "./skills",

@@ -1,8 +1,10 @@
 # Template — parent item / epic
 
 A parent is an **overview**, not a delivery item. It never carries the delivery stencil and is
-never marked `ready-for-agent`. In shipyard the usual parent is `.scratch/<feature>/PRD.md`
-(`templates/prd.md`); use this epic shape when you need a lighter parent without a full PRD.
+never marked `ready-for-agent`. In shipyard the parent for an **initiative** is
+`.scratch/<feature>/PRD.md` (`templates/prd.md`, shape D/E). Shape C is sibling issues in one
+folder with `## Parent: —` — do not use this epic as a substitute PRD. Use this epic shape only
+when you need a lighter parent than a PRD **and** the work is still an initiative.
 
 ---
 

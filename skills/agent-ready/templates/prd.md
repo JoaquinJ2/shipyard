@@ -3,9 +3,8 @@
 Path: `.scratch/<feature>/PRD.md`
 
 A PRD is the **parent definition** for an initiative. It is **not** agent-ready for
-implementation — delivery issues under `issues/` are. Use when shape D or E from
-`rules/20-slicing.md`. For a single self-contained item (shape B), a thin stub PRD linking the
-one ticket is enough.
+implementation — delivery issues under `issues/` are. Write this file **only** for shape D or E
+from `rules/20-slicing.md`. Do **not** stub a PRD for shape B or C (`/plan-work`).
 
 Matt `/to-spec` may draft content; this template is the required skeleton.
 

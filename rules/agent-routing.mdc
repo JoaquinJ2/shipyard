@@ -49,7 +49,7 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Su
 | --- | --- |
 | `/setup-shipyard` | Overlay + `scripts/sync-cursor.sh` (once per repo) |
 | `/update-shipyard` | Pull submodule + re-materialize kernel and packs |
-| `/plan-prd` | Idea → grill → invent → slice → draft → refine → readiness gate → tickets. No product code. |
+| `/plan-work` | Idea → always grill → inventory → shape A–E → draft → refine → readiness gate → tickets. PRD only for D/E. No product code. `/plan-prd` is an alias. |
 | `/refine-ticket` | Refine one `.scratch` issue + fresh readiness gate |
 | `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → plan gate → writer by `Surface:` → review → QA → livingdocs → commit |
 | `/ship-prd` | Branch `feat/<feature>` → all tickets → one commit per ticket |
@@ -60,11 +60,11 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Su
 
 | Agent | When |
 | --- | --- |
-| `planner` | `/plan-prd`, `/refine-ticket` draft/refine, seams — never self-certify ready |
+| `planner` | `/plan-work` (alias `/plan-prd`), `/refine-ticket` draft/refine, seams — never self-certify ready |
 | `ticket-readiness-reviewer` | After draft/refine — CORE gate; only READY → `ready-for-agent` |
 | `implementer` | `Surface: backend` or `tooling` |
 | `frontend-developer` | `Surface: frontend` (visual pack) |
-| `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-prd` UI specs |
+| `designer` | `Surface: design-system`; UI review; `/audit-ui`; `/plan-work` UI specs |
 | `copywriter` | Visible strings when copy pack is on |
 | `spec-reviewer` | After writer — diff vs ticket AC / `Done means:` / Out of scope |
 | `standards-reviewer` | After writer — `.cursor/rules` + smells |

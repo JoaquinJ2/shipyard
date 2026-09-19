@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Discover, manufacture agent-ready tickets, gate, and ship with writer-not-reviewer.",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "plugins": [
     {

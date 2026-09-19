@@ -12,8 +12,8 @@ Ticket decidability (state tables, stop conditions, empty-value semantics, CORE 
 
 | Stage | Who | Output |
 | --- | --- | --- |
-| Discover | Matt `/grill-with-docs` via `planner` | Approvals table, seams |
-| Manufacture | `planner` + `agent-ready` templates | `.scratch/<feature>/PRD.md` + issues at `needs-info` |
+| Discover | Matt `/grill-with-docs` via `planner` (always) | Locks A1…An; PRD Approvals when D/E, else ticket Decisions |
+| Manufacture | `planner` + `agent-ready` templates | `.scratch/<feature>/issues/` at `needs-info`; `PRD.md` only for D/E |
 | Gate | `ticket-readiness-reviewer` (fresh) | `ready-for-agent` only on READY |
 | Ship | writers by `Surface:` + code reviewers + QA | Branch, diff, conventional commit |
 | Record | `/livingdocs-record` | CHANGELOG / feature docs |
@@ -109,7 +109,7 @@ Reload Window. Applies to **all** projects — prefer the submodule flow above f
 
 | Path | Role |
 | --- | --- |
-| `commands/` | `/plan-prd`, `/refine-ticket`, `/ship-ticket`, `/ship-prd`, `/review-diff`, `/audit-ui`, `/setup-shipyard`, `/update-shipyard` |
+| `commands/` | `/plan-work` (`/plan-prd` alias), `/refine-ticket`, `/ship-ticket`, `/ship-prd`, `/review-diff`, `/audit-ui`, `/setup-shipyard`, `/update-shipyard` |
 | `agents/` | Writers, code reviewers, `ticket-readiness-reviewer`, `qa-verifier` |
 | `rules/agent-routing.mdc` | Always-on routing (writer ≠ reviewer; author ≠ gate) |
 | `skills/agent-ready/` | Ticket anatomy, slicing, refinement, CORE gate, templates |
@@ -123,7 +123,7 @@ Reload Window. Applies to **all** projects — prefer the submodule flow above f
 
 `docs/agents/shipyard.md` in the consuming repo: surfaces, packs, **Agent profile** (proof commands, traps, escalation), QA commands, git base branch. Agents and commands read it on start.
 
-Tickets of `/plan-prd` and `/ship-*` live under `.scratch/` even if Matt triage uses GitHub Issues.
+Tickets of `/plan-work` and `/ship-*` live under `.scratch/` even if Matt triage uses GitHub Issues.
 
 ## Attribution
 

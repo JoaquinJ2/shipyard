@@ -22,7 +22,7 @@ Orchestrator and `planner`: **`cursor-grok-4.6-high`**. `ticket-readiness-review
 
 ## Steps
 
-1. Load ticket + parent PRD. Abort if missing.
+1. Load ticket. Load parent `PRD.md` **if present**. Do **not** abort when there is no PRD (shape B/C). Abort if the ticket file is missing.
 2. If status is `claimed` / `resolved`, stop — do not refine mid-ship without human confirm.
 3. Delegate to **`planner`** to refine per `rules/50`:
    - Ground in repo (commit/environment Limitation line)

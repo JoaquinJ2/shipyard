@@ -1,16 +1,18 @@
 # Issue tracker: Local Markdown (shipyard)
 
-Issues and PRDs live as markdown under `.scratch/`. Shipped trees move to `.scratch/archive/<feature-slug>/`.
+Issues (and PRDs when the work is an initiative) live as markdown under `.scratch/`. Shipped trees move to `.scratch/archive/<feature-slug>/`.
 
 Ticket craft (anatomy, slicing, readiness): `.cursor/skills/agent-ready/` (templates under that skill).
 
 ## Layout
 
-| Artifact | Path |
-| --- | --- |
-| PRD | `.scratch/<feature-slug>/PRD.md` |
-| Delivery issues | `.scratch/<feature-slug>/issues/<NN>-<slug>.md` (from `01`) |
-| Archive | `.scratch/archive/<feature-slug>/` |
+A scratch tree is `.scratch/<feature-slug>/` plus `issues/`. **`PRD.md` exists only for shape D or E** (`/plan-work`). Shape B and C have issues and no PRD.
+
+| Artifact | Path | When |
+| --- | --- | --- |
+| Delivery issues | `.scratch/<feature-slug>/issues/<NN>-<slug>.md` (from `01`) | Always |
+| PRD | `.scratch/<feature-slug>/PRD.md` | Shape D/E only |
+| Archive | `.scratch/archive/<feature-slug>/` | After last ticket closes |
 
 ## Required ticket fields
 
@@ -19,7 +21,7 @@ Near the top of every delivery issue:
 - `**Status:**` — see [triage-labels.md](./triage-labels.md)
 - `**Surface:**` — `backend` | `frontend` | `design-system` | `tooling` (routing after a justified split)
 - `**Blocked by:**` — ticket numbers or `—`
-- `## Parent` — link to PRD
+- `## Parent` — link to `../PRD.md` when a PRD exists; otherwise `—`
 
 Prefer full agent-ready anatomy (`Done means:`, Current state, Decisions, Stop conditions, AC, Proof plan). See `skills/agent-ready/templates/feature-task.md`.
 
@@ -42,21 +44,21 @@ needs-triage → needs-info → ready-for-agent → claimed → resolved
                          readiness READY   ready-for-human → needs-info
 ```
 
-- Drafts from `/plan-prd` start at **`needs-info`**
+- Drafts from `/plan-work` start at **`needs-info`**
 - Only **`ticket-readiness-reviewer`** READY → **`ready-for-agent`**
 - `/ship-ticket` sets **`claimed`** (AC frozen)
 - Stop conditions / fix-cap → **`ready-for-human`**
-- Success → **`resolved`**; PRD when archived → **`shipped`**
+- Success → **`resolved`**; if a PRD exists, when archived → **`shipped`**
 - Do **not** use orphan labels like `done` on new tickets
 
 ## Closing the last ticket (mandatory archive)
 
-When the **final** open issue for a PRD increment is resolved:
+When the **final** open issue for a scratch tree is resolved:
 
 1. Every issue is `resolved` (or `wontfix` with reason)
 2. `/livingdocs-record` if behaviour changed
 3. Move tree to `.scratch/archive/<feature-slug>/`
-4. Set PRD `**Status:** shipped`
+4. If `PRD.md` exists, set PRD `**Status:** shipped`
 5. Fix Parent links; remove empty active feature dir
 6. Update archive README / map files if the repo uses them
 

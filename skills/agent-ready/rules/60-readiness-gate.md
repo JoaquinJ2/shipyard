@@ -120,7 +120,7 @@ detail" is not a finding.
 - A ready marker (`**Status:** ready-for-agent`) is applied **only** after a fresh-context
   `READY` from `ticket-readiness-reviewer`.
 - Never self-certified by the author, the `planner`, or the drafting agent.
-- Whoever executes `/plan-prd` or `/refine-ticket` may not add the marker if the gate omitted it.
+- Whoever executes `/plan-work` (or alias `/plan-prd`) or `/refine-ticket` may not add the marker if the gate omitted it.
 - Parents / PRDs / epics are never `ready-for-agent` for implementation — only delivery issues.
 - At pass 3 with advisory-only failures: do **not** set `ready-for-agent`; append
   `## Agent-readiness gaps` and require explicit human confirm before `/ship-ticket`.
