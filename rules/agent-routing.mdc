@@ -49,7 +49,7 @@ Every ticket under `.scratch/<feature>/issues/` must declare **`Surface:`**. `Su
 | --- | --- |
 | `/setup-shipyard` | Overlay + `scripts/sync-cursor.sh` (once per repo) |
 | `/update-shipyard` | Pull submodule + re-materialize kernel and packs |
-| `/plan-work` | Idea → always grill → inventory → shape A–E + Lane → draft → preflight → batched readiness gate → tickets. PRD only for D/E. No product code. `/plan-prd` is an alias. |
+| `/plan-work` | Idea → always grill **in this chat** (one Q + recommendation per turn; not a subagent) → inventory → shape A–E + Lane → draft → preflight → batched readiness gate → tickets. PRD only for D/E. No product code. `/plan-prd` is an alias. |
 | `/refine-ticket` | Refine one `.scratch` issue + fresh readiness gate |
 | `/ship-ticket` | Branch `feat/<feature>/<NN>-<slug>` → plan gate → writer by `Surface:` → review matrix → QA ticket/increment → livingdocs on contract close → commit |
 | `/ship-prd` | Branch `feat/<feature>` → tickets **serially** (one writer) → increment QA at end |

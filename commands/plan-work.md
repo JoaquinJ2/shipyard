@@ -32,7 +32,17 @@ Orchestrator and `planner` agent: **`cursor-grok-4.6-high`**. Readiness reviewer
 
 1. **Overlay gate** — as above.
 
-2. **Grill always** — Delegate to **`planner`** with Matt `/grill-with-docs` (even if only a couple of questions). Do **not** skip because the ask looks small. Locks are numbered A1…An. **No tickets** until grill locks exist.
+2. **Grill always** — Run Matt `/grill-with-docs` **in this conversation** (load primitives `grilling` and `domain-modeling`; the wrapper is one line and dumps questions if they do not load). Even a couple of questions. Do **not** skip because the ask looks small. **No tickets** until locks A1…An exist.
+
+   **Do not** Task/subagent the interview. A subagent cannot wait for the human, so it returns a wall of questions.
+
+   **Shipyard overlay** (overrides Matt's "ask the whole frontier in one round"):
+   - Exactly **one** question per turn. Wait for the answer. Then the next.
+   - Every question includes **your recommended answer** and why (so the human can say "yes").
+   - If you use AskQuestion: `questions` length **1**; recommended choice first, label ends with `(Recommended)`; put the why in the prompt. Never two prompts in one form.
+   - Never a numbered wall, never several `❓` blocks in one message.
+   - If the codebase can answer it, look it up — do not ask.
+   - After the last answer, list locks **A1…An** and stop grilling. Then continue this command (inventory, shape).
 
 3. **Explore** — `CONTEXT.md`, relevant ADRs, existing `features/<slug>/`, optional `AUDIT.md`, overlay Agent profile.
 
@@ -102,3 +112,5 @@ Use the Task tool with pinned models. Tell each agent to follow its shipyard age
 - Self-gating tickets the planner just wrote in the same context
 - Writing `PRD.md` for shape A, B, or C
 - Skipping `/grill-with-docs`
+- Grilling via Task/subagent, or more than one grill question in a single turn / AskQuestion form
+- Asking without a recommended answer

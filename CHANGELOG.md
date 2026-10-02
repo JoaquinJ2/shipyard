@@ -12,6 +12,7 @@
 
 ### Changed
 
+- `/plan-work` grill runs in the user chat, one question per turn with a recommended answer (not a Task dump / AskQuestion wall).
 - `/plan-work` does not launch designer merely because `visual: on` and the work touches UI.
 - Ship review matrix: spec always; standards skipped on light (static lints); security always only on `high`.
 - `/livingdocs-record` at contract close (last ticket / no-PRD tree), not every PRD slice.

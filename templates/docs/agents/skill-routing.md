@@ -35,7 +35,7 @@ Every ticket declares **`Surface:`** (`backend` | `frontend` | `design-system` |
 
 ```
 planner (Grok) + agent-ready skill
-  → grill-with-docs (always) → locks A1…An
+  → grill-with-docs in this chat (always; grilling + domain-modeling; one Q + recommendation per turn) → locks A1…An
   → inventory active + deferred + archive
   → shape A–E + Lane (rules/20; bias A/B; light forbidden on DB/auth/…)
   → halt on C/D/E or ambiguous B vs D; continue on A/B/Dup
